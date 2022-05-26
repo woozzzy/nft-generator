@@ -1,0 +1,22 @@
+{
+  "name": "nft-generator",
+  "version": "1.0.0",
+  "description": "Automatic NFT generation and minting given various layers.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/woozzzy/nft-generator.git"
+  },
+  "author": "Sunwoo Park",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/woozzzy/nft-generator/issues"
+  },
+  "homepage": "https://github.com/woozzzy/nft-generator#readme",
+  "dependencies": {
+    "canvas": "^2.9.1"
+  }
+}
