@@ -9,7 +9,8 @@ const layerOrder = [
 ]
 
 const config = {
-    editions: 10,
+    editionCount: 10,
+    generateAll: false,
     height: 512,
     width: 512,
     layerOrder: layerOrder,

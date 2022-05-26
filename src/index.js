@@ -1,5 +1,7 @@
-const basePath = process.cwd()
-const { setup, generate } = require(`${basePath}/src/main.js`)
+const basePath = process.cwd();
+const { setupDir, generate } = require(`${basePath}/src/art_engine.js`);
 
-setup()
-generate()
+(() => {
+    setupDir();
+    generate();
+})();
