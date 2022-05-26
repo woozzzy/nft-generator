@@ -8,17 +8,16 @@ const layerOrder = [
     { name: "Top lid" },
 ]
 
-const config = {
+export const config = {
     collectionName: "test",
     description: "descriptiongoeshere",
     baseURI: "ipfs://urigoeshere",
-    editionCount: 10,
-    generateAll: true,
+    editionCount: 5,
+    generateAll: false,
     height: 512,
     width: 512,
     layerOrder: layerOrder,
+    debug: true,
 }
 
-module.exports = {
-    config,
-}
+// module.exports = { config, }

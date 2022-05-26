@@ -1,11 +1,12 @@
 // Paths
 const basePath = process.cwd();
-const outDir = `${basePath}/output`
+const outPath = `${basePath}/output`
 
 //Imports
-const fs = require('fs')
-const { createCanvas, loadImage } = require('canvas')
-const { config } = require(`${basePath}/src/config.js`)
+import fs from 'fs'
+import pkg from 'canvas'
+const { createCanvas, loadImage } = pkg
+import { config } from './config.js'
 
 // Import Configuration Data
 const editionCount = config.editionCount
@@ -13,6 +14,7 @@ const generateAll = config.generateAll
 const height = config.height
 const width = config.width
 const layerOrder = config.layerOrder.map((layer) => layer.name)
+const debug = config.debug
 
 // Global Variables
 const canvas = createCanvas(width, height)
@@ -55,13 +57,13 @@ function buildTraitMap() {
     });    
 }
 
-function setupDir() {
-    if (fs.existsSync(outDir)) {
-        fs.rmSync(outDir, {recursive: true})
+export function setupDir() {
+    if (fs.existsSync(outPath)) {
+        fs.rmSync(outPath, {recursive: true})
     }
-    fs.mkdirSync(outDir)
-    fs.mkdirSync(`${outDir}/json`)
-    fs.mkdirSync(`${outDir}/images`)
+    fs.mkdirSync(outPath)
+    fs.mkdirSync(`${outPath}/json`)
+    fs.mkdirSync(`${outPath}/images`)
 }
 
 function chooseTrait(layer) {
@@ -135,9 +137,9 @@ function drawAllUUID() {
             traitList: traitList,
         }
         edition++
-        createMetadata(tuuid)
         await drawUUID(tuuid)
         saveImage(tuuid)
+        createMetadata(tuuid)
     })
 }
 
@@ -171,41 +173,46 @@ async function drawUUID(uuid) {
 
 function saveImage(uuid) {
     const buffer = canvas.toBuffer('image/png')
-    fs.writeFileSync(`${outDir}/images/${uuid.edition}_test_${uuid.uuid}.png`, buffer)
-    console.log(`Created ${uuid.edition}_test_${uuid.uuid}.png`)
+    fs.writeFileSync(`${outPath}/images/${uuid.edition}.png`, buffer)
+    debug ? console.log(`Created ${uuid.edition}.png`) : null
 }
 
 // Metadata Generation Functions
 function createMetadata(uuid) {
     let metadata = {
-        name: `${config.collectionName} # ${uuid.edition}`,
+        name: `${config.collectionName}#${uuid.edition}`,
         description: `${config.description}`,
-        image: `${config.baseURI}/${uuid.filename}`,
+        // image: `${config.baseURI}/${uuid.filename}.png`,
+        image: new File(
+            [fs.readFileSync(`${outPath}/images/${uuid.edition}.png`)],
+            `${uuid.edition}.png`,
+            { type: 'image/png' }
+        ),
         edition: uuid.edition,
         uuid: parseInt(uuid.uuid), 
         date: Date.now(),
         attributes: uuid.attributes,
     }
-    fs.writeFileSync(`${outDir}/json/${uuid.edition}_test_${uuid.uuid}.json`, JSON.stringify(metadata, null, 2))
+    fs.writeFileSync(`${outPath}/json/${uuid.edition}.json`, JSON.stringify(metadata, null, 2))
 }
 
-async function generate() {
+export async function generate() {
     buildTraitMap()
     if (generateAll || editionCount >= maxEditions) { 
-        console.log("Generating all ")
+        debug ? console.log("Generating all ") : null
         drawAllUUID()
     } else {
         while (edition < (editionCount > maxEditions ? maxEditions : editionCount)) {
-            uuid = buildUUID(edition)
-            createMetadata(uuid)
+            let uuid = buildUUID(edition)
             await drawUUID(uuid)
             saveImage(uuid)
+            createMetadata(uuid)
         } 
     }
 
     if (!generateAll && edition <= config.editionCount - 1) {
-        console.log(`You need more layers/variations to generate ${config.editionCount} editions.`)
+        debug ? console.log(`You need more layers/variations to generate ${config.editionCount} editions.`) : null
     }
 }
 
-module.exports = { setupDir, generate, }
+// module.exports = { setupDir, generate, }
