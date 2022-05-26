@@ -128,15 +128,16 @@ function drawAllUUID() {
             traitList.push(trait)
         })
 
-        let ret = {
+        let tuuid = {
             uuid: uuid,
             edition: edition,
             rarity: rarity,
             traitList: traitList,
         }
         edition++
-        await drawUUID(ret)
-        saveImage(ret)
+        createMetadata(tuuid)
+        await drawUUID(tuuid)
+        saveImage(tuuid)
     })
 }
 
@@ -196,9 +197,9 @@ async function generate() {
     } else {
         while (edition < (editionCount > maxEditions ? maxEditions : editionCount)) {
             uuid = buildUUID(edition)
+            createMetadata(uuid)
             await drawUUID(uuid)
             saveImage(uuid)
-            createMetadata(uuid)
         } 
     }
 

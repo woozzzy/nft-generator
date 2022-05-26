@@ -13,7 +13,7 @@ const config = {
     description: "descriptiongoeshere",
     baseURI: "ipfs://urigoeshere",
     editionCount: 10,
-    generateAll: false,
+    generateAll: true,
     height: 512,
     width: 512,
     layerOrder: layerOrder,
