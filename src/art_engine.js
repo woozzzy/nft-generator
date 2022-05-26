@@ -38,6 +38,7 @@ function buildTraitMap() {
                     name: splitName[0],
                     layer: layer,
                     weight: splitName[1].split('.')[0],
+                    filename: trait,
                     path:  `${basePath}/layers/${layer}/${trait}`,
                 }
             })
@@ -81,18 +82,24 @@ function buildUUID() {
     let uuid = ''
     let rarity = 1
     let traitList = []
+    let attributes = []
 
     layerOrder.forEach((layer) => {
         let trait = chooseTrait(layer)
         rarity *= trait.weight / traitMap.get(layer).totalWeight
         uuid += trait.index
         traitList.push(trait)
+        attributes.push({
+            trait_type: trait.layer,
+            value: trait.name,
+        })
     })
     let ret = {
         uuid: uuid,
         edition: edition,
         rarity: rarity,
         traitList: traitList,
+        attributes: attributes,
     }
     if (!uuidSet.has(ret)) {
         uuidSet.add(ret)
@@ -168,8 +175,17 @@ function saveImage(uuid) {
 }
 
 // Metadata Generation Functions
-function createMetadata() {
-    
+function createMetadata(uuid) {
+    let metadata = {
+        name: `${config.collectionName} # ${uuid.edition}`,
+        description: `${config.description}`,
+        image: `${config.baseURI}/${uuid.filename}`,
+        edition: uuid.edition,
+        uuid: parseInt(uuid.uuid), 
+        date: Date.now(),
+        attributes: uuid.attributes,
+    }
+    fs.writeFileSync(`${outDir}/json/${uuid.edition}_test_${uuid.uuid}.json`, JSON.stringify(metadata, null, 2))
 }
 
 async function generate() {
@@ -182,6 +198,7 @@ async function generate() {
             uuid = buildUUID(edition)
             await drawUUID(uuid)
             saveImage(uuid)
+            createMetadata(uuid)
         } 
     }
 

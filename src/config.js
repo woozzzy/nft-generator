@@ -9,6 +9,9 @@ const layerOrder = [
 ]
 
 const config = {
+    collectionName: "test",
+    description: "descriptiongoeshere",
+    baseURI: "ipfs://urigoeshere",
     editionCount: 10,
     generateAll: false,
     height: 512,
