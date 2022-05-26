@@ -42,18 +42,4 @@ async function isValidWeight(input) {
     return true
 }
 
-async function promptTest() {
-    let layers = fs.readdirSync(`${basePath}`)
-        .filter(item => !(/(^|\/)\.[^\/\.]/g).test(item))
-    for (let i = 0; i < layers.length; i++) {
-        await inquirer.prompt([{
-            type: 'input',
-            name: 'weight',
-            message: `Specify the weight of ${layers[i]}`,
-            validate: isValidWeight,
-        }])
-    }
-}
-
-// promptTest()
 readTraits()
