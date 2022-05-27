@@ -12,12 +12,11 @@ export const config = {
     collectionName: "test",
     description: "descriptiongoeshere",
     baseURI: "ipfs://urigoeshere",
-    editionCount: 5,
+    editionCount: 15,
     generateAll: false,
     height: 512,
     width: 512,
     layerOrder: layerOrder,
+    saveConfig: true,
     debug: true,
 }
-
-// module.exports = { config, }

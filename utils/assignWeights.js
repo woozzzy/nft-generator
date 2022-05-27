@@ -36,10 +36,7 @@ async function readTraits() {
 }
 
 async function isValidWeight(input) {
-    if (isNaN(input) || (+input) <= 0) {
-        return false
-    }
-    return true
+    return (isNaN(input) || (+input) <= 0) ? false : true 
 }
 
 readTraits()

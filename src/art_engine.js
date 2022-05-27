@@ -15,6 +15,7 @@ const height = config.height
 const width = config.width
 const layerOrder = config.layerOrder.map((layer) => layer.name)
 const debug = config.debug
+const saveConfig = config.saveConfig
 
 // Global Variables
 const canvas = createCanvas(width, height)
@@ -113,7 +114,7 @@ function buildUUID() {
 
 // Image Generation Functions
 function drawAllUUID() {
-    layerList = []
+    let layerList = []
 
     for (let layer of layerOrder) {
         layerList.push(traitMap.get(layer))
@@ -182,7 +183,7 @@ function createMetadata(uuid) {
     let metadata = {
         name: `${config.collectionName}#${uuid.edition}`,
         description: `${config.description}`,
-        image: `${config.baseURI}/${uuid.filename}.png`,
+        // image: `${config.baseURI}/${uuid.filename}.png`,
         // image: new File(
         //     [fs.readFileSync(`${outPath}/images/${uuid.edition}.png`)],
         //     `${uuid.edition}.png`,
@@ -194,6 +195,10 @@ function createMetadata(uuid) {
         attributes: uuid.attributes,
     }
     fs.writeFileSync(`${outPath}/json/${uuid.edition}.json`, JSON.stringify(metadata, null, 2))
+}
+
+function saveConfiguration() {
+    fs.writeFileSync(`${outPath}/config.json`, JSON.stringify({...config, generatedEditions: edition}, null, 2))
 }
 
 export async function generate() {
@@ -213,6 +218,5 @@ export async function generate() {
     if (!generateAll && edition <= config.editionCount - 1) {
         debug ? console.log(`You need more layers/variations to generate ${config.editionCount} editions.`) : null
     }
+    saveConfig ? saveConfiguration() : null
 }
-
-// module.exports = { setupDir, generate, }
