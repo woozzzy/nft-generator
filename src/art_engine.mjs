@@ -6,7 +6,7 @@ const outPath = `${basePath}/output`
 import fs from 'fs'
 import pkg from 'canvas'
 const { createCanvas, loadImage } = pkg
-import { config } from './config.js'
+import { config } from './config.mjs'
 
 // Import Configuration Data
 const startingEdition = config.startingEdition

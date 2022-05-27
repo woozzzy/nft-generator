@@ -10,7 +10,7 @@ module.exports = {
     hardhat: {
     },
     PolygonMumbai : {
-      url: "https://rpc-mumbai.maticvigil.com", 
+      url: "https://matic-mumbai.chainstacklabs.com", 
       accounts: [PRIVATE_KEY]
     }
   },

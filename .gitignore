@@ -107,3 +107,5 @@ dist
 output/
 .env
 .DS_Store
+artifacts/
+cache/
