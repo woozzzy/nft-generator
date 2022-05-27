@@ -12,7 +12,12 @@ module.exports = {
     PolygonMumbai : {
       url: "https://matic-mumbai.chainstacklabs.com", 
       accounts: [PRIVATE_KEY]
-    }
+    },
+    KlaytnBaobab : {
+      url: "https://api.baobab.klaytn.net:8651", 
+      accounts: [PRIVATE_KEY],
+      gasPrice: 250000000000,
+    },
   },
   solidity: {
     version: "0.8.12",

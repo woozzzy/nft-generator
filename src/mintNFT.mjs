@@ -1,3 +1,6 @@
+// Polygon
+// const CONTRACT_ADDRESS = "0x557cAC4284Bb1cd6F6B314f6D4dB6C0214e08124"
+// Klaytn
 const CONTRACT_ADDRESS = "0x557cAC4284Bb1cd6F6B314f6D4dB6C0214e08124"
 const META_DATA_URL = "ipfs://bafyreicicbswlyvyywfqkgmclswrn5x7cufqiujimcwtihye3ngedqvf3e/metadata.json"
 
