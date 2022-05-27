@@ -9,6 +9,7 @@ const { createCanvas, loadImage } = pkg
 import { config } from './config.js'
 
 // Import Configuration Data
+const startingEdition = config.startingEdition
 const editionCount = config.editionCount
 const generateAll = config.generateAll
 const height = config.height
@@ -58,7 +59,7 @@ function buildTraitMap() {
     });    
 }
 
-export function setupDir() {
+export async function setupDir() {
     if (fs.existsSync(outPath)) {
         fs.rmSync(outPath, {recursive: true})
     }
@@ -174,8 +175,8 @@ async function drawUUID(uuid) {
 
 function saveImage(uuid) {
     const buffer = canvas.toBuffer('image/png')
-    fs.writeFileSync(`${outPath}/images/${uuid.edition}.png`, buffer)
-    debug ? console.log(`Created ${uuid.edition}.png`) : null
+    fs.writeFileSync(`${outPath}/images/${uuid.edition + startingEdition}.png`, buffer)
+    debug ? console.log(`Created ${uuid.edition + startingEdition}.png`) : null
 }
 
 // Metadata Generation Functions
@@ -189,12 +190,14 @@ function createMetadata(uuid) {
         //     `${uuid.edition}.png`,
         //     { type: 'image/png' }
         // ),
-        edition: uuid.edition,
+        edition: uuid.edition + startingEdition,
         uuid: parseInt(uuid.uuid), 
         date: Date.now(),
         attributes: uuid.attributes,
     }
-    fs.writeFileSync(`${outPath}/json/${uuid.edition}.json`, JSON.stringify(metadata, null, 2))
+    fs.writeFileSync(`${outPath}/json/${uuid.edition + startingEdition}.json`, JSON.stringify(metadata, null, 2))
+    debug ? console.log(`Created ${uuid.edition + startingEdition}.json`) : null
+
 }
 
 function saveConfiguration() {
