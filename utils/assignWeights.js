@@ -2,8 +2,8 @@
 const basePath = `${process.cwd()}/layers`
 
 //Imports
-const fs = require('fs')
-const inquirer = require('inquirer');
+import fs from 'fs'
+import inquirer from 'inquirer'
 
 async function readTraits() {
     let layers = fs.readdirSync(`${basePath}`)

@@ -182,12 +182,12 @@ function createMetadata(uuid) {
     let metadata = {
         name: `${config.collectionName}#${uuid.edition}`,
         description: `${config.description}`,
-        // image: `${config.baseURI}/${uuid.filename}.png`,
-        image: new File(
-            [fs.readFileSync(`${outPath}/images/${uuid.edition}.png`)],
-            `${uuid.edition}.png`,
-            { type: 'image/png' }
-        ),
+        image: `${config.baseURI}/${uuid.filename}.png`,
+        // image: new File(
+        //     [fs.readFileSync(`${outPath}/images/${uuid.edition}.png`)],
+        //     `${uuid.edition}.png`,
+        //     { type: 'image/png' }
+        // ),
         edition: uuid.edition,
         uuid: parseInt(uuid.uuid), 
         date: Date.now(),
