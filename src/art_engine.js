@@ -125,11 +125,16 @@ function drawAllUUID() {
         let uuid = ''
         let rarity = 1
         let traitList = []
+        let attributes = []
 
         uue.forEach((trait) => {
             rarity *= trait.weight / traitMap.get(trait.layer).totalWeight
             uuid += trait.index
             traitList.push(trait)
+            attributes.push({
+                trait_type: trait.layer,
+                value: trait.name,
+            })
         })
 
         let tuuid = {
@@ -137,6 +142,7 @@ function drawAllUUID() {
             edition: edition,
             rarity: rarity,
             traitList: traitList,
+            attributes: attributes,
         }
         edition++
         await drawUUID(tuuid)
@@ -216,10 +222,11 @@ export async function generate() {
             saveImage(uuid)
             createMetadata(uuid)
         } 
+        if (editionCount > maxEditions) {
+            debug ? console.log(`You need more layers/variations to generate ${config.editionCount} editions.`) : null
+        }
     }
 
-    if (!generateAll && edition <= config.editionCount - 1) {
-        debug ? console.log(`You need more layers/variations to generate ${config.editionCount} editions.`) : null
-    }
+    
     saveConfig ? saveConfiguration() : null
 }

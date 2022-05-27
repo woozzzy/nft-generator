@@ -14,7 +14,7 @@ export const config = {
     baseURI: "ipfs://urigoeshere",
     startingEdition: 0,
     editionCount: 2,
-    generateAll: false,
+    generateAll: true,
     height: 512,
     width: 512,
     layerOrder: layerOrder,
