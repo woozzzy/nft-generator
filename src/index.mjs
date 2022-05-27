@@ -5,5 +5,5 @@ import { storeAllNFT } from './upload.js';
 (async () => {
     await setupDir();
     await generate();
-    // await storeAllNFT();
+    await storeAllNFT();
 })();
