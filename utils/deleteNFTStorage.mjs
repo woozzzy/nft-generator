@@ -16,7 +16,7 @@ export async function deleteAllNFTs(receipt) {
     const client = new NFTStorage({ token: NFT_STORAGE_KEY })
 
     tokenReceipt.tokens.forEach(async (token) => {
-        await client.delete(token.ipnft)
+        await client.delete(token)
     });
 
 }
