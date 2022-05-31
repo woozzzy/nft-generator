@@ -8,7 +8,7 @@ import fs from 'fs'
 import { config } from '../src/config.mjs'
 import 'dotenv/config'
 
-export async function deleteAllNFTs(receipt) {
+export async function deleteAllNFTs() {
     const rawReceipt = await fs.promises.readFile(`${outPath}/receipt.json`)
     const tokenReceipt = JSON.parse(rawReceipt)
     const client = new NFTStorage({ token: process.env.NFT_STORAGE_KEY })
@@ -26,5 +26,3 @@ export async function deleteAllNFTs(receipt) {
         config.debug ? console.log(err) : null
     })
 }
-
-deleteAllNFTs()

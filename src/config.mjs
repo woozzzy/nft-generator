@@ -10,7 +10,7 @@ const layerOrder = [
 
 export const config = {    
     // Collection Level Metadata
-    collectionName: "collectiontest",
+    collectionName: "thisnamebetterbeuniquecollection12345",
     collectionDescription: "longerdescriptiongoeshere",
     collectionImage: "image-url",
     collectionLink: "external-link-url",
@@ -21,7 +21,7 @@ export const config = {
     nftDescription: "descriptiongoeshere",
     // General Settings
     startingEdition: 0,
-    editionCount: 2,
+    editionCount: 3,
     generateAll: false,
     height: 512,
     width: 512,

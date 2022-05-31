@@ -14,7 +14,7 @@ import {config} from './config.mjs'
 const ethers = hre.ethers
 
 // Global Variables
-const contract = config.contract
+const contract = config.contractName
 let receipt = {
     imageCID: '',
     metadataCID: '',
@@ -24,7 +24,11 @@ let receipt = {
 
 export async function setupMint() {
     process.env.HARDHAT_NETWORK = config.network
-    generateContract()
+    process.env.HARDHAT_VERBOSE = true
+    const rawReceipt = await fs.promises.readFile(`${outPath}/receipt.json`)
+    receipt = JSON.parse(rawReceipt)
+    await generateContract()
+    await hre.run("compile")
 }
 
 async function generateContract() {
@@ -38,11 +42,10 @@ async function generateContract() {
             newValue = newValue
                 .replace('replacenameoftoken', config.token)
                 .replace('replacenameofsymbol',  config.symbol)
-        }
-    
+        }    
         fs.writeFile(`${basePath}/contracts/${config.contractName}.sol`, newValue, 'utf-8', function (err) {
             if (err) throw err
-            console.log('filelistAsync complete')
+            config.debug ? console.log(`Generated Contract: ${config.contractName}.sol`) : null
         })
     })
 }
@@ -89,27 +92,48 @@ export async function storeNFT() {
 }
 
 export async function deployContract() {
-    const contract_pre = await ethers.getContractFactory(contract)
+    console.log("Getting Contract Factory")
+    const contract_pre = await hre.ethers.getContractFactory(contract)
+    console.log("Deploying Contract")
     const contract_post = await contract_pre.deploy()
+    console.log("Waiting for Deploy Confirmation")
     await contract_post.deployed()
     // This solves the bug in Mumbai network where the contract address is not the real one
+    console.log("Getting Contract Address")
     const txHash = contract_post.deployTransaction.hash
-    const txReceipt = await ethers.provider.waitForTransaction(txHash)
+    const txReceipt = await hre.ethers.provider.waitForTransaction(txHash)
     const contractAddress = txReceipt.contractAddress
     process.env.CONTRACT_ADDRESS = contractAddress
-    debug ? console.log("Contract deployed to address:", contractAddress) : null
+    config.debug ? console.log("Contract deployed to address:", contractAddress) : null
 }
 
 async function mintNFT(metaDataURL) {
-   const contract_pre = await ethers.getContractFactory(contract)
-   const [owner] = await ethers.getSigners()
+   const contract_pre = await hre.ethers.getContractFactory(contract)
+   const [owner] = await hre.ethers.getSigners()
    await contract_pre.attach(process.env.CONTRACT_ADDRESS).safeMint(owner.address, metaDataURL)
    return owner.address
 }
 
 export async function mintAllNFT() {
+    const contract_pre = await hre.ethers.getContractFactory(contract)
+    const [owner] = await hre.ethers.getSigners()
+    const contract_post = contract_pre.attach(process.env.CONTRACT_ADDRESS)
+    let uriList = []
     for (let metadata of receipt.metadata) {
-        let ownerAddress = await mintNFT(`ipfs://${receipt.metadataCID}}/${metadata}`)
-        debug ? console.log(`NFT ${metadata} has been minted to ${ownerAddress}`) : null
+        let metaDataURL = `ipfs://${receipt.metadataCID}/${metadata}`
+        uriList.push(metaDataURL)
+    }
+    contract_post.batchMint(owner.address, uriList)
+}
+
+async function burnAllNFTs() {
+    const contract_pre = await hre.ethers.getContractFactory(contract)
+    const contract_post = await contract_pre.attach('0xb79eb507D36F46993aE0077E54E3eb5FbC5c232f')
+    for (let i = await contract_post.totalSupply() - 1; i >= 0; i--) {
+        await contract_post.burn(i).catch(() => {
+            console.log(`Token ID ${i} does not exist`)
+        })
     }
 }
+
+burnAllNFTs()

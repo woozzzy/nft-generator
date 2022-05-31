@@ -22,6 +22,15 @@ contract replacenameofcontract is ERC721, ERC721Enumerable, ERC721URIStorage, ER
         _setTokenURI(tokenId, uri);
     }
 
+    function batchMint(address to, string[] memory uri) public onlyOwner {
+        for (uint i = 0; i < uri.length; i++) {
+            uint256 tokenId = _tokenIdCounter.current();
+            _tokenIdCounter.increment();
+            _safeMint(to, tokenId);
+            _setTokenURI(tokenId, uri[i]);
+        }    
+    }
+
     // The following functions are overrides required by Solidity.
 
     function _beforeTokenTransfer(address from, address to, uint256 tokenId)
