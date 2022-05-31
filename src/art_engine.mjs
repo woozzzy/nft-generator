@@ -188,8 +188,8 @@ function saveImage(uuid) {
 // Metadata Generation Functions
 function createMetadata(uuid) {
     let metadata = {
-        name: `${config.collectionName}#${uuid.edition}`,
-        description: `${config.description}`,
+        name: `${config.nftName}#${uuid.edition}`,
+        description: `${config.nftDescription}`,
         // image: `${config.baseURI}/${uuid.filename}.png`,
         // image: new File(
         //     [fs.readFileSync(`${outPath}/images/${uuid.edition}.png`)],

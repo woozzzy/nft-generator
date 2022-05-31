@@ -5,18 +5,29 @@ const outPath = `${basePath}/output`
 // Imports
 import { NFTStorage } from 'nft.storage'
 import fs from 'fs'
-
-const NFT_STORAGE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkaWQ6ZXRocjoweDljNWU5ZDg1NTA2ZGQyNmNkZGY4RkZEMERERGQ0Njk0MTZlRGM3ZjkiLCJpc3MiOiJuZnQtc3RvcmFnZSIsImlhdCI6MTY1MzU1Mzg0MTk4OCwibmFtZSI6InBvbHlnb25ORlQifQ.NIXxlJtqh5okJK62pc8xkrkFRKfPV3M2EwdrtYRUrkc"
-
+import { config } from '../src/config.mjs'
+import 'dotenv/config'
 
 export async function deleteAllNFTs(receipt) {
     const rawReceipt = await fs.promises.readFile(`${outPath}/receipt.json`)
     const tokenReceipt = JSON.parse(rawReceipt)
+    const client = new NFTStorage({ token: process.env.NFT_STORAGE_KEY })
 
-    const client = new NFTStorage({ token: NFT_STORAGE_KEY })
-
-    tokenReceipt.tokens.forEach(async (token) => {
-        await client.delete(token)
+    tokenReceipt.images.forEach(async (token) => {
+        await client.delete(token).then(() => {
+            config.debug ? console.log(`Successfully deleted image directory at: ${token}`) : null
+        }).catch((err) => {
+            config.debug ? console.log(`token: ${token}`) : null
+            config.debug ? console.log(err) : null
+        })
+    });
+    tokenReceipt.metadata.forEach(async (token) => {
+        await client.delete(token).then(() => {
+            config.debug ? console.log(`Successfully deleted metadata directory at: ${token}`) : null
+        }).catch((err) => {
+            config.debug ? console.log(`token: ${token}`) : null
+            config.debug ? console.log(err) : null
+        })
     });
 
 }

@@ -9,15 +9,22 @@ const layerOrder = [
 ]
 
 export const config = {
-    collectionName: "test",
-    description: "descriptiongoeshere",
-    baseURI: "ipfs://urigoeshere",
+    // Collection Level
+    collectionName: "collection",
+    collectionDescription: "thisislongerdescription",
     startingEdition: 0,
     editionCount: 2,
     generateAll: false,
     height: 512,
     width: 512,
     layerOrder: layerOrder,
+    // Single NFT
+    nftName: "test",
+    nftDescription: "descriptiongoeshere",
+    // Minting 
+    contract: "MyERC721",
+    network: "PolygonMumbai",
+    // Debugging
     saveConfig: true,
     debug: true,
 }
