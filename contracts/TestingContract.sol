@@ -8,12 +8,12 @@ import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract replacenameofcontract is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, Ownable {
+contract TestingContract is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, Ownable {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
 
-    constructor() ERC721("replacenameoftoken", "replacenameofsymbol") {}
+    constructor() ERC721("TestToken", "TTS") {}
 
     function safeMint(address to, string memory uri) public onlyOwner {
         uint256 tokenId = _tokenIdCounter.current();
@@ -23,9 +23,8 @@ contract replacenameofcontract is ERC721, ERC721Enumerable, ERC721URIStorage, ER
     }
 
     function batchMint(address to, string[] memory uri) public onlyOwner {
-        uint256 tokenId = _tokenIdCounter.current();
         for (uint i = 0; i < uri.length; i++) {
-            tokenId = _tokenIdCounter.current();
+            uint256 tokenId = _tokenIdCounter.current();
             _tokenIdCounter.increment();
             _safeMint(to, tokenId);
             _setTokenURI(tokenId, uri[i]);
@@ -46,7 +45,7 @@ contract replacenameofcontract is ERC721, ERC721Enumerable, ERC721URIStorage, ER
     }
 
     function contractURI() public pure returns (string memory) {
-        return "replaceuriofcontractmetadata";
+        return "ipfs://bafybeiaf7mbhcjeuvsv7zqtkc56nv37dzkiknqh6f5a4cnfwbfjwhxd76e/collectionMetadata.json";
     }
 
     function tokenURI(uint256 tokenId)

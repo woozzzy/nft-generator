@@ -28,6 +28,7 @@ export async function setupMint() {
     const rawReceipt = await fs.promises.readFile(`${outPath}/receipt.json`)
     receipt = JSON.parse(rawReceipt)
     await generateContract()
+    await new Promise(r => setTimeout(r, 1000));
     await hre.run("compile")
 }
 
@@ -135,5 +136,3 @@ async function burnAllNFTs() {
         })
     }
 }
-
-burnAllNFTs()

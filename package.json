@@ -25,5 +25,9 @@
     "inquirer": "^8.2.4",
     "mime": "^3.0.0",
     "nft.storage": "^6.3.0"
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-web3": "^2.0.0",
+    "web3": "^1.7.3"
   }
 }

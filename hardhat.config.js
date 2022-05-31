@@ -1,13 +1,26 @@
 /**
 * @type import('hardhat/config').HardhatUserConfig
 */
+require("hardhat-gas-reporter");
+require("@nomiclabs/hardhat-web3");
+require('@nomiclabs/hardhat-truffle5');
 require("@nomiclabs/hardhat-ethers");
 require('dotenv').config();
 const { PRIVATE_KEY } = process.env;
 module.exports = {
-  defaultNetwork: "PolygonMumbai",
+  defaultNetwork: "Ethereum",
+  gasReporter: {
+    currency: "ETH",
+    // coinmarketcap: "4d39447b-3aa9-4d95-ae47-5c4b6490c1be",
+  },
   networks: {
     hardhat: {
+    },
+    Ethereum : {
+      url: 'https://eth-mainnet.public.blastapi.io',
+    },
+    Polygon : {
+      url: 'https://eth-mainnet.public.blastapi.io',
     },
     PolygonMumbai : {
       url: "https://matic-mumbai.chainstacklabs.com", 
