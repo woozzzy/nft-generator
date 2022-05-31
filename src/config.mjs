@@ -8,7 +8,7 @@ const layerOrder = [
     { name: "Top lid" },
 ]
 
-export const config = {
+export const config = {    
     // Collection Level Metadata
     collectionName: "collectiontest",
     collectionDescription: "longerdescriptiongoeshere",
@@ -26,8 +26,11 @@ export const config = {
     height: 512,
     width: 512,
     layerOrder: layerOrder,
-    // Minting 
-    contract: "MyERC721",
+    // Contract and Minting
+    contractType: "ERC721",  
+    contractName: "TestingContract",
+    token: "TestToken",
+    symbol: "TTS",
     network: "PolygonMumbai",
     // Debugging
     saveConfig: true,

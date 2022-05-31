@@ -15,12 +15,36 @@ const ethers = hre.ethers
 
 // Global Variables
 const contract = config.contract
-process.env.HARDHAT_NETWORK = config.network
 let receipt = {
     imageCID: '',
     metadataCID: '',
     images: [],
     metadata: [],
+}
+
+export async function setupMint() {
+    process.env.HARDHAT_NETWORK = config.network
+    generateContract()
+}
+
+async function generateContract() {
+    fs.readFile(`${basePath}/contracts/My${config.contractType}_Template.sol`, 'utf-8', (err, data) => {
+        if (err) throw err
+        
+        let newValue = data
+            .replace('replacenameofcontract', config.contractName)
+            .replace('replaceuriofcontractmetadata', `ipfs://${receipt.metadataCID}/collectionMetadata.json`)
+        if (config.contractType == 'ERC721') {
+            newValue = newValue
+                .replace('replacenameoftoken', config.token)
+                .replace('replacenameofsymbol',  config.symbol)
+        }
+    
+        fs.writeFile(`${basePath}/contracts/${config.contractName}.sol`, newValue, 'utf-8', function (err) {
+            if (err) throw err
+            console.log('filelistAsync complete')
+        })
+    })
 }
 
 async function fileFromPath(filePath) {
@@ -56,6 +80,8 @@ export async function storeNFT() {
         receipt.metadata.push(`${i + config.startingEdition}.json`)
         config.debug ? console.log(`Uploading ${i+config.startingEdition}.json to NFT.Storage`) : null
     }
+    
+    config.debug ? console.log(`Uploading collectionMetadata.json to NFT.Storage`) : null
     metadataList.push(fileFromPath(`${outPath}/json/collectionMetadata.json`))
     receipt.imageCID = imgBaseUri
     receipt.metadataCID = await client.storeDirectory(metadataList)
@@ -86,8 +112,4 @@ export async function mintAllNFT() {
         let ownerAddress = await mintNFT(`ipfs://${receipt.metadataCID}}/${metadata}`)
         debug ? console.log(`NFT ${metadata} has been minted to ${ownerAddress}`) : null
     }
-}
-
-async function setNetwork(network = 'PolygonMumbai') {
-    process.env.HARDHAT_NETWORK = network
 }
