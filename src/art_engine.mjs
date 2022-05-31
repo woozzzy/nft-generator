@@ -206,6 +206,19 @@ function createMetadata(uuid) {
 
 }
 
+async function contractMetadata() {
+    let metadata = {
+        name: config.collectionName,
+        description: config.collectionDescription,
+        image: config.collectionImage,
+        external_link: config.collectionLink,
+        seller_fee_basis_points: config.fee, 
+        fee_recipient: config.feeRecipient
+      }
+      fs.writeFileSync(`${outPath}/json/collectionMetadata.json`, JSON.stringify(metadata, null, 2))
+      debug ? console.log(`Created collectionMetadata.json`) : null
+}
+
 function saveConfiguration() {
     fs.writeFileSync(`${outPath}/config.json`, JSON.stringify({...config, generatedEditions: edition}, null, 2))
 }
@@ -227,6 +240,6 @@ export async function generate() {
         }
     }
 
-    
+    await contractMetadata()
     saveConfig ? saveConfiguration() : null
 }

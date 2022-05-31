@@ -13,23 +13,18 @@ export async function deleteAllNFTs(receipt) {
     const tokenReceipt = JSON.parse(rawReceipt)
     const client = new NFTStorage({ token: process.env.NFT_STORAGE_KEY })
 
-    tokenReceipt.images.forEach(async (token) => {
-        await client.delete(token).then(() => {
-            config.debug ? console.log(`Successfully deleted image directory at: ${token}`) : null
-        }).catch((err) => {
-            config.debug ? console.log(`token: ${token}`) : null
-            config.debug ? console.log(err) : null
-        })
-    });
-    tokenReceipt.metadata.forEach(async (token) => {
-        await client.delete(token).then(() => {
-            config.debug ? console.log(`Successfully deleted metadata directory at: ${token}`) : null
-        }).catch((err) => {
-            config.debug ? console.log(`token: ${token}`) : null
-            config.debug ? console.log(err) : null
-        })
-    });
-
+    await client.delete(tokenReceipt.imageCID).then(() => {
+        config.debug ? console.log(`Successfully deleted image directory at: ${tokenReceipt.imageCID}`) : null
+    }).catch((err) => {
+        config.debug ? console.log(`token: ${tokenReceipt.imageCID}`) : null
+        config.debug ? console.log(err) : null
+    })
+    await client.delete(tokenReceipt.metadataCID).then(() => {
+        config.debug ? console.log(`Successfully deleted metadata directory at: ${tokenReceipt.metadataCID}`) : null
+    }).catch((err) => {
+        config.debug ? console.log(`token: ${tokenReceipt.metadataCID}`) : null
+        config.debug ? console.log(err) : null
+    })
 }
 
 deleteAllNFTs()

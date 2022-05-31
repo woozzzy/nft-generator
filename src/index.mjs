@@ -5,5 +5,5 @@ import { storeNFT, deployContract, mintNFT } from './mint_engine.mjs';
 (async () => {
     await setupDir();
     await generate();
-    await storeNFT()
+    await storeNFT();
 })();

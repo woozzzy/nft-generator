@@ -9,18 +9,23 @@ const layerOrder = [
 ]
 
 export const config = {
-    // Collection Level
-    collectionName: "collection",
-    collectionDescription: "thisislongerdescription",
+    // Collection Level Metadata
+    collectionName: "collectiontest",
+    collectionDescription: "longerdescriptiongoeshere",
+    collectionImage: "image-url",
+    collectionLink: "external-link-url",
+    fee: 100, 
+    feeRecipient: "0xA97F337c39cccE66adfeCB2BF99C1DdC54C2D721",
+    // NFT Level Metadata
+    nftName: "test",
+    nftDescription: "descriptiongoeshere",
+    // General Settings
     startingEdition: 0,
     editionCount: 2,
     generateAll: false,
     height: 512,
     width: 512,
     layerOrder: layerOrder,
-    // Single NFT
-    nftName: "test",
-    nftDescription: "descriptiongoeshere",
     // Minting 
     contract: "MyERC721",
     network: "PolygonMumbai",

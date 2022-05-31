@@ -17,6 +17,8 @@ const ethers = hre.ethers
 const contract = config.contract
 process.env.HARDHAT_NETWORK = config.network
 let receipt = {
+    imageCID: '',
+    metadataCID: '',
     images: [],
     metadata: [],
 }
@@ -37,24 +39,26 @@ export async function storeNFT() {
 
     for (let i = 0; i < config.generatedEditions; i++) {
         imageList.push(await fileFromPath(`${outPath}/images/${i + config.startingEdition}.png`))
-        config.debug ? console.log(`Uploading ${i+config.startingEdition}.png to NFT.Storage`) : null
+        receipt.images.push(`${i + config.startingEdition}.png`)
+        config.debug ? console.log(`Uploading ${i + config.startingEdition}.png to NFT.Storage`) : null
     }
     
     let imgBaseUri = await client.storeDirectory(imageList)
     
     for (let i = 0; i < config.generatedEditions; i++) {
         const rawMetadata = await fs.promises.readFile(`${outPath}/json/${i + config.startingEdition}.json`)
-        metadataList.push(new File(     
+        metadataList.push(new File(
             [JSON.stringify({
                 image: `ipfs://${imgBaseUri}/${i + config.startingEdition}.png`,
                 ... JSON.parse(rawMetadata)
             }, null, 2)], `${i + config.startingEdition}.json`
-            ))
-            config.debug ? console.log(`Uploading ${i+config.startingEdition}.json to NFT.Storage`) : null
+        ))
+        receipt.metadata.push(`${i + config.startingEdition}.json`)
+        config.debug ? console.log(`Uploading ${i+config.startingEdition}.json to NFT.Storage`) : null
     }
-        
-    receipt.images.push(imgBaseUri)
-    receipt.metadata.push(await client.storeDirectory(metadataList))
+    metadataList.push(fileFromPath(`${outPath}/json/collectionMetadata.json`))
+    receipt.imageCID = imgBaseUri
+    receipt.metadataCID = await client.storeDirectory(metadataList)
     fs.writeFileSync(`${outPath}/receipt.json`, JSON.stringify(receipt, null, 2))
 }
 
@@ -67,14 +71,21 @@ export async function deployContract() {
     const txReceipt = await ethers.provider.waitForTransaction(txHash)
     const contractAddress = txReceipt.contractAddress
     process.env.CONTRACT_ADDRESS = contractAddress
-    console.log("Contract deployed to address:", contractAddress)
+    debug ? console.log("Contract deployed to address:", contractAddress) : null
 }
 
-export async function mintNFT(metaDataURL) {
+async function mintNFT(metaDataURL) {
    const contract_pre = await ethers.getContractFactory(contract)
    const [owner] = await ethers.getSigners()
    await contract_pre.attach(process.env.CONTRACT_ADDRESS).safeMint(owner.address, metaDataURL)
-   console.log("NFT minted to: ", owner.address)
+   return owner.address
+}
+
+export async function mintAllNFT() {
+    for (let metadata of receipt.metadata) {
+        let ownerAddress = await mintNFT(`ipfs://${receipt.metadataCID}}/${metadata}`)
+        debug ? console.log(`NFT ${metadata} has been minted to ${ownerAddress}`) : null
+    }
 }
 
 async function setNetwork(network = 'PolygonMumbai') {
