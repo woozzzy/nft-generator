@@ -109,4 +109,3 @@ output/
 .DS_Store
 artifacts/
 cache/
-test/

@@ -11,7 +11,6 @@ import path from 'path'
 import hre from 'hardhat'
 import 'dotenv/config'
 import {config} from './config.mjs'
-const ethers = hre.ethers
 
 // Global Variables
 const contract = config.contractName
@@ -124,15 +123,6 @@ export async function mintAllNFT() {
         let metaDataURL = `ipfs://${receipt.metadataCID}/${metadata}`
         uriList.push(metaDataURL)
     }
+    config.debug ? console.log("Minting NFTS to: ", owner.address) : null
     contract_post.batchMint(owner.address, uriList)
-}
-
-async function burnAllNFTs() {
-    const contract_pre = await hre.ethers.getContractFactory(contract)
-    const contract_post = await contract_pre.attach('0xb79eb507D36F46993aE0077E54E3eb5FbC5c232f')
-    for (let i = await contract_post.totalSupply() - 1; i >= 0; i--) {
-        await contract_post.burn(i).catch(() => {
-            console.log(`Token ID ${i} does not exist`)
-        })
-    }
 }

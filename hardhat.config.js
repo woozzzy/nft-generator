@@ -2,17 +2,12 @@
 * @type import('hardhat/config').HardhatUserConfig
 */
 require("hardhat-gas-reporter");
-require("@nomiclabs/hardhat-web3");
-require('@nomiclabs/hardhat-truffle5');
+require("@nomiclabs/hardhat-waffle");
 require("@nomiclabs/hardhat-ethers");
 require('dotenv').config();
 const { PRIVATE_KEY } = process.env;
 module.exports = {
-  defaultNetwork: "Ethereum",
-  gasReporter: {
-    currency: "ETH",
-    // coinmarketcap: "4d39447b-3aa9-4d95-ae47-5c4b6490c1be",
-  },
+  defaultNetwork: "PolygonMumbai",
   networks: {
     hardhat: {
     },

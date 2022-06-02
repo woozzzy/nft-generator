@@ -5,6 +5,7 @@ const outPath = `${basePath}/output`
 // Imports
 import { NFTStorage } from 'nft.storage'
 import fs from 'fs'
+import hre from 'hardhat'
 import { config } from '../src/config.mjs'
 import 'dotenv/config'
 
@@ -26,3 +27,16 @@ export async function deleteAllNFTs() {
         config.debug ? console.log(err) : null
     })
 }
+
+async function burnAllNFTs() {
+    const contract_pre = await hre.ethers.getContractFactory(config.contractName)
+    const contract_post = await contract_pre.attach('0x4330492A89a251AaF4e661Fc5551A4cb5D3878A7')
+    for (let i = await contract_post.totalSupply() - 1; i >= 0; i--) {
+        await contract_post.burn(i).catch(() => {
+            console.log(`Token ID ${i} does not exist`)
+        })
+    }
+}
+
+deleteAllNFTs()
+burnAllNFTs()

@@ -23,8 +23,9 @@ contract TestingContract is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Bu
     }
 
     function batchMint(address to, string[] memory uri) public onlyOwner {
+        uint256 tokenId = _tokenIdCounter.current();
         for (uint i = 0; i < uri.length; i++) {
-            uint256 tokenId = _tokenIdCounter.current();
+            tokenId = _tokenIdCounter.current();
             _tokenIdCounter.increment();
             _safeMint(to, tokenId);
             _setTokenURI(tokenId, uri[i]);
@@ -45,7 +46,7 @@ contract TestingContract is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Bu
     }
 
     function contractURI() public pure returns (string memory) {
-        return "ipfs://bafybeiaf7mbhcjeuvsv7zqtkc56nv37dzkiknqh6f5a4cnfwbfjwhxd76e/collectionMetadata.json";
+        return "ipfs://bafybeihxdzusoeql5nlai3vfb4v2shd65ge4zrf3s5j7jieo27mizmaup4/collectionMetadata.json";
     }
 
     function tokenURI(uint256 tokenId)
