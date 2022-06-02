@@ -1,5 +1,7 @@
 // We import Chai to use its asserting functions here.
 const { expect } = require("chai");
+const hre = require("hardhat");
+const ethers = hre.ethers;
 
 // `describe` is a Mocha function that allows you to organize your tests. It's
 // not actually needed, but having your tests organized makes debugging them
@@ -29,7 +31,7 @@ describe("Token contract", function () {
   // time. It receives a callback, which can be async.
   beforeEach(async function () {
     // Get the ContractFactory and Signers here.
-    Token = await ethers.getContractFactory("Token");
+    Token = await ethers.getContractFactory("TestingContract");
     [owner, addr1, addr2, ...addrs] = await ethers.getSigners();
 
     // To deploy our contract, we just have to call Token.deploy() and await

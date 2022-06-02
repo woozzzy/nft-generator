@@ -32,6 +32,7 @@ async function burnAllNFTs() {
     const contract_pre = await hre.ethers.getContractFactory(config.contractName)
     const contract_post = await contract_pre.attach('0x4330492A89a251AaF4e661Fc5551A4cb5D3878A7')
     for (let i = await contract_post.totalSupply() - 1; i >= 0; i--) {
+        console.log(`Burning Token ID ${i}`)
         await contract_post.burn(i).catch(() => {
             console.log(`Token ID ${i} does not exist`)
         })
