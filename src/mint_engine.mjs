@@ -1,4 +1,3 @@
-
 // Paths
 const basePath = process.cwd();
 const outPath = `${basePath}/output`
@@ -13,7 +12,6 @@ import 'dotenv/config'
 import {config} from './config.mjs'
 
 // Global Variables
-const contract = config.contractName
 let receipt = {
     imageCID: '',
     metadataCID: '',
@@ -23,7 +21,6 @@ let receipt = {
 
 export async function setupMint() {
     process.env.HARDHAT_NETWORK = config.network
-    process.env.HARDHAT_VERBOSE = true
     const rawReceipt = await fs.promises.readFile(`${outPath}/receipt.json`)
     receipt = JSON.parse(rawReceipt)
     await generateContract()
@@ -92,15 +89,15 @@ export async function storeNFT() {
 }
 
 export async function deployContract() {
-    console.log("Getting Contract Factory")
-    const contract_pre = await hre.ethers.getContractFactory(contract)
-    console.log("Deploying Contract")
-    const contract_post = await contract_pre.deploy()
-    console.log("Waiting for Deploy Confirmation")
-    await contract_post.deployed()
+    config.debug ? console.log("Getting Contract Factory"): null
+    const token = await hre.ethers.getContractFactory(config.contractName)
+    config.debug ? console.log("Deploying Contract"): null
+    const hardhatToken = await token.deploy()
+    config.debug ? console.log("Waiting for Deploy Confirmation"): null
+    await hardhatToken.deployed()
     // This solves the bug in Mumbai network where the contract address is not the real one
-    console.log("Getting Contract Address")
-    const txHash = contract_post.deployTransaction.hash
+    config.debug ? console.log("Getting Contract Address"): null
+    const txHash = hardhatToken.deployTransaction.hash
     const txReceipt = await hre.ethers.provider.waitForTransaction(txHash)
     const contractAddress = txReceipt.contractAddress
     process.env.CONTRACT_ADDRESS = contractAddress
@@ -108,21 +105,43 @@ export async function deployContract() {
 }
 
 async function mintNFT(metaDataURL) {
-   const contract_pre = await hre.ethers.getContractFactory(contract)
+   const token = await hre.ethers.getContractFactory(config.contractName)
    const [owner] = await hre.ethers.getSigners()
-   await contract_pre.attach(process.env.CONTRACT_ADDRESS).safeMint(owner.address, metaDataURL)
+   await token.attach(process.env.CONTRACT_ADDRESS).safeMint(owner.address, metaDataURL)
    return owner.address
 }
 
 export async function mintAllNFT() {
-    const contract_pre = await hre.ethers.getContractFactory(contract)
+    const rawReceipt = await fs.promises.readFile(`${outPath}/receipt.json`)
+    receipt = JSON.parse(rawReceipt)
+
+    const token = await hre.ethers.getContractFactory(config.contractName)
     const [owner] = await hre.ethers.getSigners()
-    const contract_post = contract_pre.attach(process.env.CONTRACT_ADDRESS)
+    process.env.CONTRACT_ADDRESS = '0x3959F19Ff9353Ca724043f355EFB6f01A050c5C0'
+    const hardhatToken = token.attach(process.env.CONTRACT_ADDRESS)
     let uriList = []
     for (let metadata of receipt.metadata) {
         let metaDataURL = `ipfs://${receipt.metadataCID}/${metadata}`
         uriList.push(metaDataURL)
     }
+    // console.log(`Estimated Gas Cost: `, await hardhatToken.estimateGas.batchMint(owner.address, uriList))
     config.debug ? console.log("Minting NFTS to: ", owner.address) : null
-    contract_post.batchMint(owner.address, uriList)
+    console.log(await hardhatToken.batchMint(owner.address, uriList.slice(40, 100)))
+}
+
+export async function estimateMintCost() {
+    const rawReceipt = await fs.promises.readFile(`${outPath}/receipt.json`)
+    receipt = JSON.parse(rawReceipt)
+
+    const token = await hre.ethers.getContractFactory(config.contractName)
+    const [owner] = await hre.ethers.getSigners()
+    const hardhatToken = token.attach('0xd7faaf723e2e60cc6cc37102e95180e918c9a35a')
+
+    // let uriList = Array.from(Array(10).keys()) 
+    let uriList = []
+    for (let metadata of receipt.metadata) {
+        let metaDataURL = `ipfs://${receipt.metadataCID}/${metadata}`
+        uriList.push(metaDataURL)
+    }
+    return await hardhatToken.estimateGas.batchMint(owner.address, uriList.slice(0, 40))
 }

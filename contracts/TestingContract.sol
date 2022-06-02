@@ -5,11 +5,10 @@ import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721URIStorage.sol";
 import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Burnable.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Royalty.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/Counters.sol";
 
-contract TestingContract is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, ERC721Royalty, Ownable {
+contract TestingContract is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Burnable, Ownable {
     using Counters for Counters.Counter;
 
     Counters.Counter private _tokenIdCounter;
@@ -42,12 +41,12 @@ contract TestingContract is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Bu
         super._beforeTokenTransfer(from, to, tokenId);
     }
 
-    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage, ERC721Royalty) {
+    function _burn(uint256 tokenId) internal override(ERC721, ERC721URIStorage) {
         super._burn(tokenId);
     }
 
     function contractURI() public pure returns (string memory) {
-        return "ipfs://bafybeihxdzusoeql5nlai3vfb4v2shd65ge4zrf3s5j7jieo27mizmaup4/collectionMetadata.json";
+        return "ipfs://bafybeidmnqangkl2bbrdztdh5at2berxrahzkmd4p3zon7opkwugmmbfdy/collectionMetadata.json";
     }
 
     function tokenURI(uint256 tokenId)
@@ -62,7 +61,7 @@ contract TestingContract is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Bu
     function supportsInterface(bytes4 interfaceId)
         public
         view
-        override(ERC721, ERC721Enumerable, ERC721Royalty)
+        override(ERC721, ERC721Enumerable)
         returns (bool)
     {
         return super.supportsInterface(interfaceId);
