@@ -21,7 +21,7 @@ export const config = {
     nftDescription: "descriptiongoeshere",
     // General Settings
     startingEdition: 0,
-    editionCount: 100,
+    editionCount: 10,
     generateAll: false,
     height: 512,
     width: 512,

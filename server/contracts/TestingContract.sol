@@ -46,7 +46,7 @@ contract TestingContract is ERC721, ERC721Enumerable, ERC721URIStorage, ERC721Bu
     }
 
     function contractURI() public pure returns (string memory) {
-        return "ipfs://bafybeidmnqangkl2bbrdztdh5at2berxrahzkmd4p3zon7opkwugmmbfdy/collectionMetadata.json";
+        return "ipfs://bafybeibuo3ydmm7vzahiig65bzc35uyrq5cym67plwbhmeo4bwvww24m6u/collectionMetadata.json";
     }
 
     function tokenURI(uint256 tokenId)

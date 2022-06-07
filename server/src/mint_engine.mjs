@@ -126,7 +126,7 @@ export async function mintAllNFT() {
     }
     // console.log(`Estimated Gas Cost: `, await hardhatToken.estimateGas.batchMint(owner.address, uriList))
     config.debug ? console.log("Minting NFTS to: ", owner.address) : null
-    console.log(await hardhatToken.batchMint(owner.address, uriList.slice(40, 100)))
+    console.log(await hardhatToken.batchMint(owner.address, uriList))
 }
 
 export async function estimateMintCost() {

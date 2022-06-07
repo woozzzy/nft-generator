@@ -30,7 +30,7 @@ export async function deleteAllNFTs() {
 
 async function burnAllNFTs() {
     const contract_pre = await hre.ethers.getContractFactory(config.contractName)
-    const contract_post = await contract_pre.attach('0x81a0b43c610a74da6c5b4088a492c4ea1ecc7a1f')
+    const contract_post = await contract_pre.attach('0x3959F19Ff9353Ca724043f355EFB6f01A050c5C0')
     for (let i = await contract_post.totalSupply() - 1; i >= 0; i--) {
         console.log(`Burning Token ID ${i}`)
         await contract_post.burn(i).catch(() => {

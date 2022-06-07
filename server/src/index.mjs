@@ -11,12 +11,3 @@ import { deployContract, estimateMintCost, mintAllNFT, setupMint, storeNFT } fro
     await deployContract();
     await mintAllNFT();
 })();
-
-// console.log("MUMBAI:")
-// await fetch('https://gasstation-mumbai.matic.today/v2')
-//   .then(response => response.json())
-//   .then(json => console.log(json))
-// console.log("MAINNET:")
-// await fetch('https://gasstation-mainnet.matic.network/v2')
-//   .then(response => response.json())
-//   .then(json => console.log(json))
