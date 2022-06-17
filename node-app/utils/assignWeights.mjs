@@ -28,8 +28,8 @@ async function readTraits() {
                 if (trait.includes('#')) {
                     trait = trait.split('#')[0]
                 }
-                fs.renameSync(`${basePath}/${layer}/${filename}`,`${basePath}/${layer}/${trait}#${answer.weight}.png`)
-                console.log(`\x1b[90m Renamed /${filename} -> /${trait}#${answer.weight}.png \x1b[0m`)
+                fs.renameSync(`${basePath}/${layer}/${filename}`,`${basePath}/${layer}/${trait}_${answer.weight}.png`)
+                console.log(`\x1b[90m Renamed /${filename} -> /${trait}_${answer.weight}.png \x1b[0m`)
             }) 
         }
     }

@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import Form from './Form/Form';
 import LayerOrder from './LayerOrder/LayerOrder';
-import Upload from "./Upload/Upload";
+import LayerUpload from "./LayerUpload/LayerUpload";
+import { getConfigs } from "../../actions/config";
+import { getLayers } from "../../actions/layer";
 
 const ConfigForm = ({ props }) => {
     const { currentId } = props;
@@ -20,6 +22,14 @@ const ConfigForm = ({ props }) => {
         debug: false,
     });
     const config = useSelector((state) => (currentId ? state.posts.find((message) => message._id === currentId) : null));
+    const dispatch = useDispatch();
+
+    const layers = useSelector((state) => state.layer.layerList); 
+
+    useEffect(() => {
+        dispatch(getConfigs());
+        dispatch(getLayers());
+    }, []);  
 
     useEffect(() => {
         if (config) setConfigData(config);
@@ -32,8 +42,8 @@ const ConfigForm = ({ props }) => {
 
             </Grid>
             <Grid item xs={4}>
-                <Upload props={{ ...props, configData, setConfigData }} />
-                {configData.layerOrder.length > 0 ? <LayerOrder props={{ ...props, configData, setConfigData }} ></LayerOrder> : null}
+                <LayerUpload props={{ ...props, configData, setConfigData }} />
+                {layers.length > 0 ? <LayerOrder props={{ ...props, configData, setConfigData }} ></LayerOrder> : null}
             </Grid>
             <Grid item >
 

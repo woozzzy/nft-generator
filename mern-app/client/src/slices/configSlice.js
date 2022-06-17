@@ -21,4 +21,6 @@ const configSlice = createSlice({
     }
 });
 
+export const { FETCH_ALL, CREATE, UPDATE, DELETE } = configSlice.actions
+
 export default configSlice;

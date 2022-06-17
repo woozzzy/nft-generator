@@ -33,7 +33,7 @@ const Form = ({ props }) => {
 		} else {
 			dispatch(createConfig(configData));
 		}
-		clear();
+		// clear();
     };
 
     return (
@@ -70,7 +70,7 @@ const Form = ({ props }) => {
                         }
                     />
                     <Box sx={styles.buttons}>
-                        <Button sx={styles.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>Generate</Button>
+                        <Button sx={styles.buttonSubmit} variant="contained" color="primary" size="large" type="submit" fullWidth>Save</Button>
                     </Box>
                 </Box>
             </form>

@@ -1,17 +1,25 @@
+import fs from "fs";
 import path from "path";
 import multer from "multer";
+// const basePath = process.cwd();
+const DIR = './public/';
+
 
 export const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, path.join(__dirname, './images/'))
+    destination: (req, file, cb) => {
+        const writePath = path.join(DIR, file.originalname.split('-')[0], file.originalname.split('-')[1]);
+        if(!fs.existsSync(writePath)) {
+            fs.mkdirSync(writePath, { recursive: true });
+        }
+        cb(null, writePath)
     },
-    filename: function (req, file, cb) {
-            cb(null, file.fieldname + '-' + Date.now() + file.originalname.match(/\..*$/)[0])
+    filename: (req, file, cb) => {
+        cb(null, file.originalname.split('-')[2])
     }
 });
 
 export const upload = multer({
-    storage,
+    storage: storage,
     limits: { fileSize: 10 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
         if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {
@@ -20,7 +28,7 @@ export const upload = multer({
             cb(null, false);
             const err = new Error('Only .png, .jpg and .jpeg format allowed!')
             err.name = 'ExtensionError'
-            return cb(err);
+            cb(err);
         }
     },
-}).array('uploadedImages', 2)
+});

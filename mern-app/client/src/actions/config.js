@@ -1,11 +1,11 @@
-import { FETCH_ALL, CREATE, UPDATE, DELETE } from '../constants/actionTypes';
+import { FETCH_ALL, CREATE, UPDATE, DELETE } from '../slices/configSlice';
 
 import * as api from '../api/index.js';
 
 export const getConfigs = () => async (dispatch) => {
     try {
         const { data } = await api.fetchConfigs();
-        dispatch({ type: FETCH_ALL, payload: data });
+        dispatch(FETCH_ALL(data));
     } catch (error) {
         console.log(error);
     }
@@ -14,7 +14,7 @@ export const getConfigs = () => async (dispatch) => {
 export const createConfig = (config) => async (dispatch) => {
     try {
         const { data } = await api.createConfig(config);
-        dispatch({ type: CREATE, payload: data });
+        dispatch(CREATE(data));
     } catch (error) {
         console.log(error);
     }
@@ -23,7 +23,7 @@ export const createConfig = (config) => async (dispatch) => {
 export const updateConfig = (id, config) => async (dispatch) => {
     try {
         const { data } = await api.updateConfig(id, config);
-        dispatch({ type: UPDATE, payload: data });
+        dispatch(UPDATE(data))
     } catch (error) {
         console.log(error);
     }
@@ -32,7 +32,7 @@ export const updateConfig = (id, config) => async (dispatch) => {
 export const deleteConfig = (id) => async (dispatch) => {
     try {
         await api.deleteConfig(id);
-        dispatch({ type: DELETE, payload: id });
+        dispatch(DELETE(id))
     } catch (error) {
         console.log(error);
     }

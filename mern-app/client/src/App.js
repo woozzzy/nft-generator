@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Container, AppBar, Typography, Grow, Grid, Toolbar, createTheme, ThemeProvider } from "@mui/material";
-import { useDispatch } from "react-redux";
 
 // import NFTs from './components/NFTs/NFTs'
 import ConfigForm from './components/ConfigForm/ConfigForm'
-import { getConfigs } from "./actions/config";
+
 
 function App() {
     const [currentId, setCurrentId] = useState(0);
     const theme = createTheme();
-
-    const dispatch = useDispatch(); 
-
-    useEffect(() => {
-        dispatch(getConfigs());
-    }, [currentId, dispatch]);    
 
     const styles = {
         appBar: { borderRadius: 15, margin: '30px 0', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', },

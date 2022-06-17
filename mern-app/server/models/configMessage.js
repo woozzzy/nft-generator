@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
 
 const layerSchema = mongoose.Schema({
-    name: String,
+    id: Number,
+    text: String,
 });
 
 const configSchema = mongoose.Schema({    
