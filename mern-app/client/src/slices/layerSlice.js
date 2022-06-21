@@ -6,13 +6,13 @@ const layerSlice = createSlice({
         layerList: [],
     },
     reducers: {
-        FETCH_ALL: (state, action) => {
+        fetch_all: (state, action) => {
             state.layerList = action.payload;
         },
-        UPLOAD: (state, action) => {
+        upload: (state, action) => {
             state.layerList.push(action.payload);
         },
-        UPDATE: (state, action) => {
+        update: (state, action) => {
             state.layerList.map((layer) => (layer._id === action.payload._id ? action.payload : layer));
         },
         setLayerList: (state, action) => {
@@ -21,6 +21,6 @@ const layerSlice = createSlice({
     }
 });
 
-export const { UPLOAD, FETCH_ALL, UPDATE, setLayerList } = layerSlice.actions;
+export const { upload, fetch_all, update, setLayerList } = layerSlice.actions;
 
 export default layerSlice;

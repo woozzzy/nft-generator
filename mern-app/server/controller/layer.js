@@ -3,26 +3,35 @@ import layerModel from "../models/layerModel.js";
 
 
 export const uploadLayer = async (req, res) => {
-    const reqFiles = [];
+    const traitList = [];
     const url = req.protocol + '://' + req.get('host');
 
     for (var i = 0; i < req.files.length; i++) {
-        reqFiles.push(url + '/' + encodeURI(req.files[i].path));
+        traitList.push({
+            name: req.files[i].filename.replace(/\.[^/.]+$/, ""),
+            layer: req.params.layer,
+            weight: 1,
+            filename: req.files[i].filename,
+            path: url + '/' + encodeURI(req.files[i].path),
+        });
     }
 
+    const db = mongoose.connection;
+
     const layer = new layerModel({
-        name: req.files[0].originalname.split('-')[1],
-        imgCollection: reqFiles,
+        name: req.params.layer,
+        traitList,
+        order: await layerModel.countDocuments(),
+        totalWeight: traitList.length,
     });
 
     layer.save().then(result => {
         res.status(201).json({
-            layerCreated: {
-                _id: result._id,
-                name: req.files[0].originalname.split('-')[1],
-                order: result.order,
-                imgCollection: result.imgCollection
-            }
+            _id: result._id,
+            name: result.name,
+            order: result.order,
+            traitlist: result.traitList,
+            totalWeight: result.totalWeight,
         });
     }).catch(err => {
         console.log(err),
@@ -43,14 +52,14 @@ export const getLayer = async (req, res) => {
 
 export const updateLayer = async (req, res) => {
     const { id } = req.params;
-    const { name, order, imgCollection } = req.body;
+    const { name, order, traitList, totalWeight, } = req.body;
 
     if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No layer with id: ${id}`);
 
-    const updatedLayer = { name, order, imgCollection, _id: id };
+    const updatedLayer = { name, order, traitList, totalWeight, _id: id };
     await layerModel.findByIdAndUpdate(id, updatedLayer, { new: true });
 
-    res.status(204);
+    res.status(204).json({ message: "Updated Layer Succesfully!" });
 };
 
 export const updateOrder = async (req, res) => {
@@ -61,7 +70,7 @@ export const updateOrder = async (req, res) => {
         await layerModel.findByIdAndUpdate(layer._id, { order: layer.order })
     }
 
-    res.status(204);
+    res.status(204).json({ message: "Updated Order Succesfully!" });
 };
 
 export const deleteLayer = async (req, res) => {

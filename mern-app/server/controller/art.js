@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs';
 import { buildTraitMap, generate, setupDir } from '../scripts/art_engine.js';
+import zip from 'express-zip';
 
 export const getArt = async (req, res) => {
     try {
@@ -10,6 +11,15 @@ export const getArt = async (req, res) => {
         return res.status(404).json({ message: "No NFTs have been generated yet.", error: error });
     }
 };
+
+export const downloadAllArt = async (req, res) => {
+    try {
+        res.zip(files.map('./public/output/'));
+    } catch (error) {
+        return res.status(404).json({ message: "Download doesn't work yet.", error: error });
+    }
+}
+
 export const generateArt = async (req, res) => {
     try {
         await setupDir();

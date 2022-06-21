@@ -2,19 +2,19 @@ import fs from "fs";
 import path from "path";
 import multer from "multer";
 // const basePath = process.cwd();
-const DIR = './public/';
+const DIR = './public/layers';
 
 
 export const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const writePath = path.join(DIR, file.originalname.split('-')[0], file.originalname.split('-')[1]);
-        if(!fs.existsSync(writePath)) {
+        const writePath = path.join(DIR, req.params.layer);
+        if (!fs.existsSync(writePath)) {
             fs.mkdirSync(writePath, { recursive: true });
         }
         cb(null, writePath)
     },
     filename: (req, file, cb) => {
-        cb(null, file.originalname.split('-')[2])
+        cb(null, file.originalname)
     }
 });
 

@@ -1,13 +1,20 @@
 import mongoose from "mongoose";
-import autoIncrement from "mongoose-auto-increment";
 
+
+
+const traitSchema = mongoose.Schema({
+    name: String,
+    layer: String,
+    weight: Number,
+    filename: String,
+    path: String,
+});
 
 const layerSchema = mongoose.Schema({
     name: String,
-    imgCollection: {
-        type: Array
-    },
-    order: {type: Number, default: 0, unique: false},
+    order: { type: Number, default: 0, unique: false },
+    traitList: [traitSchema],
+    totalWeight: Number,
 });
 
 const layerModel = mongoose.model('layerModel', layerSchema);

@@ -37,7 +37,6 @@ export const buildTraitMap = async () => {
                     let splitName = trait.split('_')
                     totalWeight += parseInt(splitName[1].split('.')[0])
                     return {
-                        index: index,
                         name: splitName[0],
                         layer: layer,
                         weight: splitName[1].split('.')[0],
@@ -106,9 +105,9 @@ const drawUUID = async (uuid, context, config) => {
 
 const saveImage = async (uuid, canvas, config) => {
     const buffer = canvas.toBuffer('image/png');
-    const path = `${outPath}/images/${uuid.edition + config.startingEdition}.png`;
+    const path = `${outPath}/images/${uuid.edition + config.startingEdition}-${Date.now()}.png`;
     await fs.writeFile(path, buffer);
-    config.debug ? console.log(`Created ${uuid.edition + config.startingEdition}.png`) : null;
+    config.debug ? console.log(`Created ${uuid.edition + config.startingEdition}-${Date.now()}.png`) : null;
     return path;
 }
 
@@ -121,9 +120,9 @@ const createMetadata = async (uuid, config) => {
         date: Date.now(),
         attributes: uuid.attributes,
     };
-    const path = `${outPath}/json/${uuid.edition + config.startingEdition}.json`
+    const path = `${outPath}/json/${uuid.edition + config.startingEdition}-${Date.now()}.json`
     await fs.writeFile(path, JSON.stringify(metadata, null, 2));
-    config.debug ? console.log(`Created ${uuid.edition + config.startingEdition}.json`) : null;
+    config.debug ? console.log(`Created ${uuid.edition + config.startingEdition}-${Date.now()}.json`) : null;
     return path;
 }
 

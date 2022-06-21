@@ -27,25 +27,29 @@ const Form = ({ theme }) => {
 
     const currentConfig = useSelector((state) => state.config.currentConfig);
 
-    const handleSubmit = (e) => { 
+    // console.log(currentConfig);
+
+    const handleSubmit = (e) => {
         e.preventDefault();
         if (currentConfig._id) {
             dispatch(updateConfig(currentConfig._id, currentConfig));
         } else {
-            dispatch(createConfig(currentConfig)) 
+            dispatch(createConfig(currentConfig))
         }
-		// clear();
+        // clear();
     };
 
     const handleChange = (e) => {
-        const data = {...currentConfig};
-        data[e.target.name] = e.target.value;
+        const data = { ...currentConfig };
+        data[e.target.name] = e.target.type === "checkbox"
+            ? e.target.checked
+            : e.target.value;
         dispatch(setCurrentConfig(data));
     }
 
     return (
         <Paper sx={styles.paper}>
-            <form autoComplete="off" noValidate onSubmit={handleSubmit}>
+            <form autoComplete="off" onSubmit={handleSubmit}>
                 <Box sx={styles.form}>
                     <Typography variant="h6">
                         Settings
@@ -61,7 +65,7 @@ const Form = ({ theme }) => {
                         control={
                             <Checkbox
                                 name="generateAll"
-                                checked={currentConfig.generateAll} 
+                                checked={currentConfig.generateAll}
                                 onChange={handleChange}
                             />
                         }
@@ -71,7 +75,7 @@ const Form = ({ theme }) => {
                         control={
                             <Checkbox
                                 name="debug"
-                                checked={currentConfig.debug} 
+                                checked={currentConfig.debug}
                                 onChange={handleChange}
                             />
                         }

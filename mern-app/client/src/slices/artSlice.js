@@ -6,12 +6,12 @@ const artSlice = createSlice({
         images: [],
     },
     reducers: {
-        FETCH_ALL: (state, action) => {
-            state.images = action.payload;
+        fetch_all: (state, action) => {
+            state.images = [...action.payload];
         },
     }
 });
 
-export const { FETCH_ALL } = artSlice.actions;
+export const { fetch_all } = artSlice.actions;
 
 export default artSlice;

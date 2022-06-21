@@ -10,8 +10,8 @@ export const updateConfig = (id, updatedConfig) => axios.patch(`${configUrl}/${i
 export const deleteConfig = (id) => axios.delete(`${configUrl}/${id}`);
 export const getLayers = () => axios.get(layerUrl);
 
-export const uploadLayer = (files) => axios.post(layerUrl, files);
-export const updateLayer = (id, updatedLayer) => axios.patch(`${layerUrl}/${id}`, updatedLayer);
+export const uploadLayer = (layer, files) => axios.post(`${layerUrl}/${layer}`, files);
+export const updateLayer = (id, updatedLayer) => axios.patch(`${layerUrl}/update/${id}`, updatedLayer);
 export const updateOrder = (data) => axios.patch(`${layerUrl}/order`, data);
 
 export const getArt = () => axios.get(generateURL);

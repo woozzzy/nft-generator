@@ -4,6 +4,7 @@ import { Paper, Button, Typography } from "@mui/material";
 import { getStyles } from "./styles";
 import { useDispatch, useSelector } from "react-redux";
 import { generateArt } from "../../../actions/generate";
+import { Box } from "@mui/system";
 
 const GenerateBtn = ({ theme }) => {
     const styles = getStyles(theme);

@@ -15,6 +15,6 @@ export const getStyles = (theme) => ({
         borderRadius: '50%',
     },
     text: {
-
+        fontSize: '2rem',
     }
 });

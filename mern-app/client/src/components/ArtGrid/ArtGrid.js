@@ -1,19 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Grid, Paper, Stack, Typography } from "@mui/material";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 
-import { getArt } from "../../actions/generate";
 import Art from "./Art.js/Art";
 
-const GenerateBtn = ({ theme }) => {
-    const dispatch = useDispatch();
-
+const ArtGrid = ({ theme }) => {
     const images = useSelector((state) => state.art.images);
-
-    useEffect(() => {
-        dispatch(getArt());
-    }, [dispatch]);
-
     const styles = {
         paper: {
             margin: '10px 0',
@@ -34,6 +26,7 @@ const GenerateBtn = ({ theme }) => {
             margin: '1em',
         }
     }
+
     if (images && images.length > 0) {
         return (
             <Paper sx={styles.paper}>
@@ -44,12 +37,12 @@ const GenerateBtn = ({ theme }) => {
                     <Grid container justifyContent="center" sx={styles.grid}>
                         {
                             images.map((image, index) =>
-                                (<Grid item xs={2} key={index} sx={styles.gridItem}>
-                                    <Art image={image} />
-                                </Grid>))
+                            (<Grid item xs={4} sm={3} md={2} key={index} sx={styles.gridItem}>
+                                <Art image={image} />
+                            </Grid>))
                         }
                     </Grid>
-    
+
                 </Stack>
             </Paper>
         );
@@ -58,5 +51,5 @@ const GenerateBtn = ({ theme }) => {
     }
 };
 
-export default GenerateBtn;
+export default ArtGrid;
 

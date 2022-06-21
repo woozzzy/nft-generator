@@ -1,17 +1,24 @@
 import React from "react";
 import { Container, AppBar, Typography, Grow, Grid, Toolbar, createTheme, ThemeProvider } from "@mui/material";
+import { useDispatch } from "react-redux";
 
-import NFTs from './components/ArtGrid/ArtGrid'
+import ArtGrid from './components/ArtGrid/ArtGrid'
 import ConfigForm from './components/ConfigForm/ConfigForm'
-
+import { getConfigs } from "./actions/config";
+import { getLayers } from "./actions/layer";
+import { getArt } from "./actions/generate";
 
 function App() {
     const theme = createTheme();
-
+    const dispatch = useDispatch();
     const styles = {
         appBar: { borderRadius: '0.25em', margin: '30px 0', display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center', },
         image: { marginLeft: '15px', height: 60, width: 60, }
     }
+
+    dispatch(getConfigs());
+    dispatch(getLayers());
+    dispatch(getArt());
 
     return (
         <ThemeProvider theme={theme}>
@@ -30,7 +37,7 @@ function App() {
                                 <ConfigForm theme={theme} />
                             </Grid>
                             <Grid item>
-                                <NFTs theme={theme}/>
+                                <ArtGrid theme={theme} />
                             </Grid>
                         </Grid>
                     </Container>
