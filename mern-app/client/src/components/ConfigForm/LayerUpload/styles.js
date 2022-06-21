@@ -6,6 +6,10 @@ export const getStyles = (theme) => ({
   buttons: {
     boxShadow: 5,
     margin: theme.spacing(1),
+    border: '2px solid',
+    '&:hover': {
+      border: '2px solid',
+    }
   },
   previewGrid: {
     alignItems: 'center',

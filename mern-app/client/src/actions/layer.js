@@ -1,4 +1,4 @@
-import { FETCH_ALL, UPLOAD, UPDATE } from '../slices/layerSlice';
+import { FETCH_ALL, UPLOAD, UPDATE, setLayerList } from '../slices/layerSlice';
 import * as api from '../api/index.js';
 
 export const getLayers = () => async (dispatch) => {
@@ -35,10 +35,10 @@ export const updateLayer = (id, layer) => async (dispatch) => {
     }
 }
 
-export const updateOrder = (idsToUpdate) => async (dispatch) => {
+export const updateOrder = (newOrder) => async (dispatch) => {
     try {
-        const { res } = await api.updateOrder(idsToUpdate);
-        // dispatch(UPDATE(res))
+        await api.updateOrder(newOrder);
+        dispatch(setLayerList(newOrder));
     } catch (error) {
         console.log(error);
     }

@@ -6,17 +6,9 @@ const layerSchema = mongoose.Schema({
     name: String,
     imgCollection: {
         type: Array
-    }
+    },
+    order: {type: Number, default: 0, unique: false},
 });
-
-autoIncrement.initialize(mongoose.connection);
-
-layerSchema.plugin(autoIncrement.plugin, {
-    model: 'layerModel',
-    field: 'order',
-    startAt: 0,
-    incrementBy: 1
-})
 
 const layerModel = mongoose.model('layerModel', layerSchema);
 

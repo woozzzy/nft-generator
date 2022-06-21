@@ -1,40 +1,47 @@
 import React from "react";
 import { TextField, Button, Typography, Paper, Box, FormControlLabel, Checkbox } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { updateConfig, createConfig } from "../../../actions/config";
 import { getStyles } from "./styles";
+import { setCurrentConfig } from "../../../slices/configSlice";
 
-const Form = ({ props }) => {
-    const { theme, currentId, setCurrentId, configData, setConfigData } = props;
+const Form = ({ theme }) => {
     const styles = getStyles(theme);
     const dispatch = useDispatch();
 
-    const clear = () => { 
-        setCurrentId(0);
-        setConfigData({
-            nftName: '',
-            nftDescription: '',
-            startingEdition: 0,
-            editionCount: 0,
-            generateAll: false,
-            height: 512,
-            width: 512,
-            layerOrder: [],
-            debug: false,
-        })
-    };
+    // const clear = () => { 
+    //     setCurrentId(0);
+    //     setCurrentConfig({
+    //         nftName: '',
+    //         nftDescription: '',
+    //         startingEdition: 0,
+    //         editionCount: 0,
+    //         generateAll: false,
+    //         height: 512,
+    //         width: 512,
+    //         layerOrder: [],
+    //         debug: false,
+    //     })
+    // };
+
+    const currentConfig = useSelector((state) => state.config.currentConfig);
 
     const handleSubmit = (e) => { 
         e.preventDefault();
-
-        if (currentId) {
-			dispatch(updateConfig(currentId, configData));
-		} else {
-			dispatch(createConfig(configData));
-		}
+        if (currentConfig._id) {
+            dispatch(updateConfig(currentConfig._id, currentConfig));
+        } else {
+            dispatch(createConfig(currentConfig)) 
+        }
 		// clear();
     };
+
+    const handleChange = (e) => {
+        const data = {...currentConfig};
+        data[e.target.name] = e.target.value;
+        dispatch(setCurrentConfig(data));
+    }
 
     return (
         <Paper sx={styles.paper}>
@@ -43,19 +50,19 @@ const Form = ({ props }) => {
                     <Typography variant="h6">
                         Settings
                     </Typography>
-                    <TextField name="nftname" variant="outlined" size="small" label="Name" fullWidth value={configData.nftName} onChange={(e) => setConfigData({ ...configData, nftName: e.target.value })} />
-                    <TextField name="nftDescription" variant="outlined" size="small" label="Description" fullWidth value={configData.nftDescription} onChange={(e) => setConfigData({ ...configData, nftDescription: e.target.value })} />
-                    <TextField name="height" variant="outlined" size="small" label="Height" fullWidth value={configData.height} onChange={(e) => setConfigData({ ...configData, height: e.target.value })} />
-                    <TextField name="width" variant="outlined" size="small" label="width" fullWidth value={configData.width} onChange={(e) => setConfigData({ ...configData, width: e.target.value })} />
-                    <TextField name="startingEdition" variant="outlined" size="small" label="Starting Edition" fullWidth value={configData.startingEdition} onChange={(e) => setConfigData({ ...configData, startingEdition: e.target.value })} />
-                    <TextField name="editionCount" variant="outlined" size="small" label="Edition Count" fullWidth value={configData.editionCount} onChange={(e) => setConfigData({ ...configData, editionCount: e.target.value })} />
+                    <TextField name="nftName" variant="outlined" size="small" label="Name" fullWidth value={currentConfig.nftName} onChange={handleChange} />
+                    <TextField name="nftDescription" variant="outlined" size="small" label="Description" fullWidth value={currentConfig.nftDescription} onChange={handleChange} />
+                    <TextField name="height" variant="outlined" size="small" label="Height" fullWidth value={currentConfig.height} onChange={handleChange} />
+                    <TextField name="width" variant="outlined" size="small" label="Width" fullWidth value={currentConfig.width} onChange={handleChange} />
+                    <TextField name="startingEdition" variant="outlined" size="small" label="Starting Edition" fullWidth value={currentConfig.startingEdition} onChange={handleChange} />
+                    <TextField name="editionCount" variant="outlined" size="small" label="Edition Count" fullWidth value={currentConfig.editionCount} onChange={handleChange} />
                     <FormControlLabel
                         label="Generate All"
                         control={
                             <Checkbox
                                 name="generateAll"
-                                checked={configData.generateAll} 
-                                onChange={(e) => setConfigData({ ...configData, generateAll: e.target.checked })}
+                                checked={currentConfig.generateAll} 
+                                onChange={handleChange}
                             />
                         }
                     />
@@ -64,8 +71,8 @@ const Form = ({ props }) => {
                         control={
                             <Checkbox
                                 name="debug"
-                                checked={configData.debug} 
-                                onChange={(e) => setConfigData({ ...configData, debug: e.target.checked })}
+                                checked={currentConfig.debug} 
+                                onChange={handleChange}
                             />
                         }
                     />

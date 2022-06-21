@@ -5,12 +5,13 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "nodemon index.js"
+    "start": "nodemon --ignore public index.js"
   },
   "author": "Sunwoo Park",
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.20.0",
+    "canvas": "^2.9.1",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",

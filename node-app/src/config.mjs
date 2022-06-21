@@ -8,13 +8,13 @@ const layerOrder = [
     { name: "Top lid" },
 ]
 
-export const config = {    
+export const config = {
     // Collection Level Metadata
     collectionName: "thisnamebetterbeuniquecollection12345",
     collectionDescription: "longerdescriptiongoeshere",
     collectionImage: "image-url",
     collectionLink: "external-link-url",
-    fee: 100, 
+    fee: 100,
     feeRecipient: "0xA97F337c39cccE66adfeCB2BF99C1DdC54C2D721",
     // NFT Level Metadata
     nftName: "test",
@@ -27,7 +27,7 @@ export const config = {
     width: 512,
     layerOrder: layerOrder,
     // Contract and Minting
-    contractType: "ERC721",  
+    contractType: "ERC721",
     contractName: "TestingContract",
     token: "TestToken",
     symbol: "TTS",

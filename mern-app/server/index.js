@@ -6,6 +6,7 @@ import path from "path";
 
 import configRoutes from './routes/config.js';
 import layerRoutes from './routes/layer.js';
+import genRoutes from './routes/generate.js';
 
 dotenv.config();
 const CONNECTION_URL = process.env.CONNECTION_URL;
@@ -22,6 +23,7 @@ app.use(express.urlencoded({ limit: "30mb", extended: true }));
 
 app.use('/config', configRoutes);
 app.use('/layer', layerRoutes);
+app.use('/generate', genRoutes);
 app.use('/public', express.static(path.join(process.cwd(), 'public')));
 
 mongoose.connect(CONNECTION_URL, { useNewURLParser: true, useUnifiedTopology: true })

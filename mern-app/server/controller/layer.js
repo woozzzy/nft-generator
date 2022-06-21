@@ -1,4 +1,3 @@
-import { promises as fs } from 'fs';
 import mongoose from 'mongoose';
 import layerModel from "../models/layerModel.js";
 
@@ -35,7 +34,7 @@ export const uploadLayer = async (req, res) => {
 
 export const getLayer = async (req, res) => {
     try {
-        const layerModels = await layerModel.find().sort({order: 1});
+        const layerModels = await layerModel.find().sort({ order: 1 });
         res.status(201).json(layerModels);
     } catch (error) {
         res.status(409).json({ message: error })
@@ -51,20 +50,18 @@ export const updateLayer = async (req, res) => {
     const updatedLayer = { name, order, imgCollection, _id: id };
     await layerModel.findByIdAndUpdate(id, updatedLayer, { new: true });
 
-    res.status(204).json(updatedLayer);
+    res.status(204);
 };
 
 export const updateOrder = async (req, res) => {
-    // const { idA, idB, indexA, indexB } = req.params;
     const idsToUpdate = req.body
-    console.log(idsToUpdate)
-    
-    // for (const layer of idsToUpdate) {
-    //     if (!mongoose.Types.ObjectId.isValid(layer.id)) return res.status(404).send(`No layer with id: ${id}`);
-    //     await layerModel.findByIdAndUpdate(layer.id, {order: layer.order})
-    // }
 
-    res.status(204).json({message: "Updated orders",});
+    for (const layer of idsToUpdate) {
+        if (!mongoose.Types.ObjectId.isValid(layer._id)) return res.status(404).send(`No layer with id: ${layer._id}`);
+        await layerModel.findByIdAndUpdate(layer._id, { order: layer.order })
+    }
+
+    res.status(204);
 };
 
 export const deleteLayer = async (req, res) => {

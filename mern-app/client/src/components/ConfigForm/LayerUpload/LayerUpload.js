@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { CloudUpload } from '@mui/icons-material';
 import { Paper, Button, Box, Typography, Grid, TextField, Card, } from '@mui/material';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { getStyles } from "./styles";
 import { uploadLayer } from '../../../actions/layer';
 
-const LayerUpload = ({ props }) => {
-    const { theme, configData, setConfigData } = props;
+const LayerUpload = ({ theme }) => {
     const styles = getStyles(theme);
     const dispatch = useDispatch();
     const [files, setFiles] = useState({
@@ -49,6 +48,7 @@ const LayerUpload = ({ props }) => {
             dispatch(uploadLayer(files))
             clear();
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [formErrors])
 
     const validate = (values) => {
@@ -82,7 +82,7 @@ const LayerUpload = ({ props }) => {
                     </Typography>
                     <TextField name="layername" variant="outlined" size="small" label="Name of layer" value={files.layerName} fullWidth onChange={(e) => setFiles({ ...files, layerName: e.target.value })} />
                     <Typography fontSize='small' sx={{color: 'red'}}>{formErrors.layerName}</Typography>
-                    <Button sx={styles.buttons} variant="contained" color="secondary" fullWidth component="label">
+                    <Button sx={styles.buttons} variant="outlined" color="primary" fullWidth component="label">
                         <CloudUpload />
                         &nbsp; Upload Images
                         <input accept="image/*" name="layerupload" id="contained-button-file" multiple hidden type="file" onChange={handleFileUpload} />
