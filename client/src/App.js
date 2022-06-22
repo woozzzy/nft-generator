@@ -1,5 +1,5 @@
 import React from "react";
-import { Container, AppBar, Typography, Grow, Grid, Toolbar, createTheme, ThemeProvider } from "@mui/material";
+import { Container, AppBar, Typography, Grow, Grid, Toolbar, createTheme, ThemeProvider, Paper } from "@mui/material";
 import { useDispatch } from "react-redux";
 
 import ArtGrid from './components/ArtGrid/ArtGrid'
