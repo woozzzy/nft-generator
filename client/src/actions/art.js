@@ -1,6 +1,5 @@
 import { fetch_all } from '../slices/artSlice';
 import * as api from '../api/index.js';
-import download from 'downloadjs';
 
 export const getArt = () => async (dispatch) => {
     try {

@@ -10,16 +10,13 @@ import artRoutes from './routes/art.js';
 
 dotenv.config();
 const CONNECTION_URL = process.env.CONNECTION_URL;
-const PORT = process.env.PORT || 8081;
+const PORT = process.env.PORT || 5000;
 
 const app = express();
-var corsOptions = {
-    origin: "http://localhost:5556"
-};
 
-app.use(cors(corsOptions));
 app.use(express.json({ limit: "30mb", extended: true }));
 app.use(express.urlencoded({ limit: "30mb", extended: true }));
+app.use(cors());
 
 app.use('/config', configRoutes);
 app.use('/layer', layerRoutes);
@@ -29,3 +26,7 @@ app.use('/public', express.static(path.join(process.cwd(), 'public')));
 mongoose.connect(CONNECTION_URL, { useNewURLParser: true, useUnifiedTopology: true })
     .then(() => app.listen(PORT, () => console.log(`Server running on port: ${PORT}`)))
     .catch((error) => console.log(error.message));
+
+app.get('/', (req, res) => {
+    res.status(200).send(`Server running on port ${PORT}`);
+});

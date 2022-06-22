@@ -1,8 +1,10 @@
 import axios from 'axios';
 
-const configUrl = 'http://localhost:5555/config';
-const layerUrl = 'http://localhost:5555/layer';
-const artURL = 'http://localhost:5555/art';
+const host = window.location.host;
+
+const configUrl = `http://${host}/config`;
+const layerUrl = `http://${host}/layer`;
+const artURL = `http://${host}/art`;
 
 export const fetchConfigs = () => axios.get(configUrl);
 export const createConfig = (newConfig) => axios.post(configUrl, newConfig);
