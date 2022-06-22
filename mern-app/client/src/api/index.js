@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const configUrl = 'http://localhost:5555/config';
 const layerUrl = 'http://localhost:5555/layer';
-const generateURL = 'http://localhost:5555/generate';
+const artURL = 'http://localhost:5555/art';
 
 export const fetchConfigs = () => axios.get(configUrl);
 export const createConfig = (newConfig) => axios.post(configUrl, newConfig);
@@ -14,6 +14,7 @@ export const uploadLayer = (layer, files) => axios.post(`${layerUrl}/${layer}`, 
 export const updateLayer = (id, updatedLayer) => axios.patch(`${layerUrl}/update/${id}`, updatedLayer);
 export const updateOrder = (data) => axios.patch(`${layerUrl}/order`, data);
 
-export const getArt = () => axios.get(generateURL);
-export const generateArt = (config) => axios.post(generateURL, config);
+export const getArt = () => axios.get(artURL);
+export const downloadAll = () => axios.get(`${artURL}/download/all`, { responseType: 'blob' });
+export const generateArt = (config) => axios.post(artURL, config);
 

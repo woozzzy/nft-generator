@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, CardMedia } from "@mui/material";
 
-const Art = ({ image }) => {
+const ArtCard = ({ image }) => {
     return (
         <Card>
             <CardMedia
@@ -12,4 +12,4 @@ const Art = ({ image }) => {
     );
 };
 
-export default Art;
+export default ArtCard;

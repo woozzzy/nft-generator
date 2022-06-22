@@ -6,7 +6,7 @@ import ArtGrid from './components/ArtGrid/ArtGrid'
 import ConfigForm from './components/ConfigForm/ConfigForm'
 import { getConfigs } from "./actions/config";
 import { getLayers } from "./actions/layer";
-import { getArt } from "./actions/generate";
+import { getArt } from "./actions/art";
 
 function App() {
     const theme = createTheme();

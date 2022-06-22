@@ -23,7 +23,7 @@ app.use(express.urlencoded({ limit: "30mb", extended: true }));
 
 app.use('/config', configRoutes);
 app.use('/layer', layerRoutes);
-app.use('/generate', artRoutes);
+app.use('/art', artRoutes);
 app.use('/public', express.static(path.join(process.cwd(), 'public')));
 
 mongoose.connect(CONNECTION_URL, { useNewURLParser: true, useUnifiedTopology: true })

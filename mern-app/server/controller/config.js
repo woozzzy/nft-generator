@@ -1,6 +1,7 @@
 import { mongoose } from "mongoose";
 import ConfigMessage from "../models/configMessage.js";
 
+
 export const getConfig = async (req, res) => {
     try {
         const configMessages = await ConfigMessage.find();

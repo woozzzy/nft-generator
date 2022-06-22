@@ -1,6 +1,7 @@
 //Imports
 import { promises as fs } from "fs";
 import pkg from "canvas";
+import crypto from 'crypto';
 const { createCanvas, loadImage } = pkg;
 
 // Paths
@@ -23,36 +24,15 @@ export const setupDir = async () => {
     }
 };
 
-export const buildTraitMap = async () => {
+export const buildTraitMap = async (layerList) => {
     let maxEditions = 1;
-    const layers = await fs.readdir(`${basePath}/layers`);
-    const result = await Promise.all(layers
-        .filter(item => !(/(^|\/)\.[^\/\.]/g).test(item))
-        .map(async (layer, index) => {
-            let totalWeight = 0
-            const traits = await fs.readdir(`${basePath}/layers/${layer}`)
-            let traitList = traits
-                .filter(item => !(/(^|\/)\.[^\/\.]/g).test(item))
-                .map((trait, index) => {
-                    let splitName = trait.split('_')
-                    totalWeight += parseInt(splitName[1].split('.')[0])
-                    return {
-                        name: splitName[0],
-                        layer: layer,
-                        weight: splitName[1].split('.')[0],
-                        filename: trait,
-                        path: `${basePath}/layers/${layer}/${trait}`,
-                    }
-                })
-            maxEditions *= traitList.length
-            return [layer, {
-                name: layer,
-                totalWeight: totalWeight,
-                traitList: traitList,
-                path: `${basePath}/layers/${layer}`,
-            }]
-        }))
-    return { traitMap: new Map(result), maxEditions, };
+
+    return {
+        traitMap: new Map(layerList.map((layer) => {
+            maxEditions *= layer.traitList.length;
+            return [layer.name, layer]
+        })), maxEditions,
+    };
 };
 
 const chooseTrait = (layer, traitMap) => {
@@ -63,28 +43,31 @@ const chooseTrait = (layer, traitMap) => {
 
     for (let i = 0; i < traitList.length; i++) {
         if (rand < traitList[i].weight) {
-            return traitList[i]
+            return traitList[i];
         }
-        rand -= traitList[i].weight
+        rand -= traitList[i].weight;
     }
 }
 
 const buildUUID = (traitMap, edition, layerOrder) => {
-    let uuid = ''
+    let uuid = edition.toString();
     let rarity = 1
     let traitList = []
     let attributes = []
 
     layerOrder.forEach((layer) => {
-        let trait = chooseTrait(layer, traitMap)
-        rarity *= trait.weight / traitMap.get(layer).totalWeight
-        uuid += trait.index
-        traitList.push(trait)
+        let trait = chooseTrait(layer, traitMap);
+        rarity *= trait.weight / traitMap.get(layer).totalWeight;
+        uuid = uuid.concat("-", trait.name);
+        traitList.push(trait);
         attributes.push({
             trait_type: trait.layer,
             value: trait.name,
-        })
+        });
     })
+
+    uuid = crypto.createHash('md5').update(uuid).digest('hex');
+
     let ret = {
         uuid: uuid,
         edition: edition,
@@ -92,13 +75,13 @@ const buildUUID = (traitMap, edition, layerOrder) => {
         traitList: traitList,
         attributes: attributes,
     }
-
     return ret
 }
 
 const drawUUID = async (uuid, context, config) => {
     uuid.traitList.forEach(async (trait) => {
-        let img = await loadImage(`${trait.path}`)
+        const match = trait.path.match(/\/public(?<=(\/public)).*/)
+        let img = await loadImage('.' + decodeURI(match[0]));
         context.drawImage(img, 0, 0, config.width, config.height)
     })
 }
@@ -107,7 +90,7 @@ const saveImage = async (uuid, canvas, config) => {
     const buffer = canvas.toBuffer('image/png');
     const path = `${outPath}/images/${uuid.edition + config.startingEdition}-${Date.now()}.png`;
     await fs.writeFile(path, buffer);
-    config.debug ? console.log(`Created ${uuid.edition + config.startingEdition}-${Date.now()}.png`) : null;
+    config.debug ? console.log(`Created ${path}`) : null;
     return path;
 }
 
@@ -116,13 +99,13 @@ const createMetadata = async (uuid, config) => {
         name: `${config.nftName}#${uuid.edition}`,
         description: `${config.nftDescription}`,
         edition: uuid.edition + config.startingEdition,
-        uuid: parseInt(uuid.uuid),
+        uuid: uuid.uuid,
         date: Date.now(),
         attributes: uuid.attributes,
     };
     const path = `${outPath}/json/${uuid.edition + config.startingEdition}-${Date.now()}.json`
     await fs.writeFile(path, JSON.stringify(metadata, null, 2));
-    config.debug ? console.log(`Created ${uuid.edition + config.startingEdition}-${Date.now()}.json`) : null;
+    config.debug ? console.log(`Created ${path}`) : null;
     return path;
 }
 
@@ -147,7 +130,7 @@ const saveConfiguration = async (edition) => {
 
 export const generate = async (config, getTraitMap) => {
     const { traitMap, maxEditions } = getTraitMap;
-    const canvas = createCanvas(config.width, config.height);
+    const canvas = await createCanvas(config.width, config.height);
     const context = canvas.getContext('2d');
     let edition = 0;
     let uuidSet = new Set();
