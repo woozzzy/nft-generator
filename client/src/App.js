@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Container, AppBar, Typography, Grow, Grid, Toolbar, createTheme, ThemeProvider } from "@mui/material";
 import { useDispatch } from "react-redux";
 
@@ -16,9 +16,12 @@ function App() {
         image: { marginLeft: '15px', height: 60, width: 60, }
     }
 
-    dispatch(getConfigs());
-    dispatch(getLayers());
-    dispatch(getArt());
+    useEffect(() => {
+        dispatch(getConfigs());
+        dispatch(getLayers());
+        dispatch(getArt());
+    }, [])
+
 
     return (
         <ThemeProvider theme={theme}>

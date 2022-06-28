@@ -48,9 +48,16 @@ const Form = ({ theme }) => {
     }
 
     return (
-        <Paper sx={styles.paper}>
+        <>
             <form autoComplete="off" onSubmit={handleSubmit}>
-                <Box sx={styles.form}>
+                <Box sx={{
+                    '& .MuiTextField-root': {
+                        margin: theme.spacing(1),
+                    },
+                    display: 'flex',
+                    flexWrap: 'wrap',
+                    justifyContent: 'center',
+                }}>
                     <Typography variant="h6">
                         Settings
                     </Typography>
@@ -85,8 +92,8 @@ const Form = ({ theme }) => {
                     </Box>
                 </Box>
             </form>
-        </Paper >
-    );
+        </>
+    )
 };
 
 export default Form; 

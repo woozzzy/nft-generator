@@ -1,7 +1,5 @@
 import mongoose from "mongoose";
 
-
-
 const traitSchema = mongoose.Schema({
     name: String,
     layer: String,
@@ -11,6 +9,7 @@ const traitSchema = mongoose.Schema({
 });
 
 const layerSchema = mongoose.Schema({
+    owner: String,
     name: String,
     order: { type: Number, default: 0, unique: false },
     traitList: [traitSchema],

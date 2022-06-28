@@ -35,14 +35,12 @@ const LayerOrder = ({ theme }) => {
         }
     };
 
-
-
     return (
         <Paper sx={styles.paper}>
             <Typography fontSize='Small' textAlign='center' color='lightgrey'> Top </Typography>
             <List>
                 <Container dragHandleSelector=".drag-handle" lockAxis="y" onDrop={onDrop}>
-                    {layerList.map(({ _id, name }) => (
+                    {layerList && typeof (layerList) === 'object' ? layerList.map(({ _id, name }) => (
                         <Draggable key={_id}>
                             <ListItem button={true} onClick={handleClickOpen}>
                                 <ListItemText primary={name} />
@@ -53,7 +51,7 @@ const LayerOrder = ({ theme }) => {
                                 </ListItemSecondaryAction>
                             </ListItem>
                         </Draggable>
-                    ))}
+                    )) : null}
                     <EditDialog
                         open={open}
                         onClose={handleClose}

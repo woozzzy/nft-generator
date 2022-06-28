@@ -3,13 +3,13 @@ import layerModel from "../models/layerModel.js";
 import archiver from 'archiver';
 import path from 'path';
 
-import { buildTraitMap, generate, setupDir } from '../scripts/art_engine.js';
+import { buildTraitMap, generate, setupDir } from '../utils/art_engine.js';
 
 export const getArt = async (req, res) => {
     try {
         const images = await fs.readdir('./public/output/images')
         const url = req.protocol + '://' + req.get('host');
-        res.status(200).json({ images: images.map((image) => (url + '/public/output/images/' + encodeURI(image))) });
+        res.status(200).json({ images: images.map((image) => (url + '/api/public/output/images/' + encodeURI(image))) });
     } catch (error) {
         return res.status(404).json({ message: "No NFTs have been generated yet.", error: error });
     }
