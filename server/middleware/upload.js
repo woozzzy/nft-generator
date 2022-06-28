@@ -2,12 +2,12 @@ import fs from "fs";
 import path from "path";
 import multer from "multer";
 // const basePath = process.cwd();
-const DIR = './public/layers';
+const DIR = './public/';
 
 
-export const storage = multer.diskStorage({
+export const layerStore = multer.diskStorage({
     destination: (req, file, cb) => {
-        const writePath = path.join(DIR, req.params.layer);
+        const writePath = path.join(DIR, req.params.proj, "layers", req.params.layer);
         if (!fs.existsSync(writePath)) {
             fs.mkdirSync(writePath, { recursive: true });
         }
@@ -18,8 +18,8 @@ export const storage = multer.diskStorage({
     }
 });
 
-export const upload = multer({
-    storage: storage,
+export const layerUpload = multer({
+    storage: layerStore,
     limits: { fileSize: 10 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
         if (file.mimetype == "image/png" || file.mimetype == "image/jpg" || file.mimetype == "image/jpeg") {

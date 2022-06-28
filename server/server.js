@@ -19,10 +19,10 @@ app.use(express.json({ limit: "30mb", extended: true }))
 app.use(express.urlencoded({ limit: "30mb", extended: true }))
 app.use(cors())
 
-app.use('/api/project', projectRoutes)
-app.use('/layer', layerRoutes)
-app.use('/art', artRoutes)
 app.use('/api/user', userRoutes)
+app.use('/api/project', projectRoutes)
+app.use('/api/layer', layerRoutes)
+app.use('/api/art', artRoutes)
 app.use('/public', express.static(path.join(process.cwd(), 'public')))
 
 mongoose.connect(CONNECTION_URL, { useNewURLParser: true, useUnifiedTopology: true })

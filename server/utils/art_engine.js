@@ -2,21 +2,25 @@
 import { promises as fs } from "fs";
 import pkg from "canvas";
 import crypto from 'crypto';
+import path from "path";
 const { createCanvas, loadImage } = pkg;
 
 // Paths
 const basePath = "./public";
-const outPath = basePath + "/output";
+let outPath = basePath + "/output";
 
 
 // let uuidSet = new Set();
 // let edition = 0;
 // let maxEditions = 1;
 
-export const setupDir = async () => {
+export const setupDir = async (proj) => {
     try {
+        outPath = `${basePath}/${proj}/output`
         await fs.access(outPath);
         await fs.rm(outPath, { recursive: true, force: true });
+    } catch (error) {
+
     } finally {
         await fs.mkdir(outPath);
         await fs.mkdir(`${outPath}/json`);
@@ -49,19 +53,19 @@ const chooseTrait = (layer, traitMap) => {
     }
 }
 
-const buildUUID = (traitMap, edition, layerOrder) => {
+const buildUUID = (traitMap, edition, layerList) => {
     let uuid = edition.toString();
     let rarity = 1
     let traitList = []
     let attributes = []
 
-    layerOrder.forEach((layer) => {
-        let trait = chooseTrait(layer, traitMap);
-        rarity *= trait.weight / traitMap.get(layer).totalWeight;
+    layerList.forEach((layer) => {
+        let trait = chooseTrait(layer.name, traitMap);
+        rarity *= trait.weight / layer.totalWeight;
         uuid = uuid.concat("-", trait.name);
         traitList.push(trait);
         attributes.push({
-            trait_type: trait.layer,
+            trait_type: layer.name,
             value: trait.name,
         });
     })
@@ -136,9 +140,10 @@ export const generate = async (config, getTraitMap) => {
     let uuidSet = new Set();
     let images = [];
     let metadata = [];
+    const sortedLayerList = config.layerList.sort((a, b) => (b.order - a.order))
 
     while (edition < (config.editionCount > maxEditions ? maxEditions : config.editionCount)) {
-        const uuid = buildUUID(traitMap, edition, config.layerOrder);
+        const uuid = buildUUID(traitMap, edition, sortedLayerList);
         if (!uuidSet.has(uuid)) {
             uuidSet.add(uuid);
             edition++;

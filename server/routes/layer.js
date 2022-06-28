@@ -1,14 +1,14 @@
 import express from "express";
-import { upload } from "../middleware/upload.js";
-import { getLayer, uploadLayer, updateLayer, deleteLayer, updateOrder } from "../controller/layer.js";
-
+import { layerUpload as upload } from "../middleware/upload.js";
+import { authenticateToken } from "../middleware/user.js";
+import { getLayers, uploadLayer, updateLayer, deleteLayer, updateOrder } from "../controller/layer.js";
 const router = express.Router();
 
-router.get('/', getLayer);
-router.post('/:layer', upload.array('layerUpload'), uploadLayer);
-router.patch('/order', updateOrder);
-router.patch('/update/:id', updateLayer);
-router.delete('/', deleteLayer);
+router.get('/:proj/all', authenticateToken, getLayers);
+router.post('/:proj/:layer', [authenticateToken, upload.array('layerUpload')], uploadLayer);
+router.patch('/:proj/order', authenticateToken, updateOrder);
+router.patch('/:proj/:layer', authenticateToken, updateLayer);
+router.delete('/:proj/:layer', authenticateToken, deleteLayer);
 
 
 export default router;

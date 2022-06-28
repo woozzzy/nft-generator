@@ -1,23 +1,30 @@
-import axios from 'axios';
+import axios from 'axios'
 
-const host = window.location.host;
-console.log(host);
+// const host = window.location.host
+const host = "localhost:5555"
 
-const configUrl = `http://${host}/api/config`;
-const layerUrl = `http://${host}/api/layer`;
-const artURL = `http://${host}/api/art`;
+const projectUrl = `http://${host}/api/project`
+const layerUrl = `http://${host}/api/layer`
+const artURL = `http://${host}/api/art`
+const authURL = `http://${host}/api/user`
 
-export const fetchConfigs = () => axios.get(configUrl);
-export const createConfig = (newConfig) => axios.post(configUrl, newConfig);
-export const updateConfig = (id, updatedConfig) => axios.patch(`${configUrl}/${id}`, updatedConfig);
-export const deleteConfig = (id) => axios.delete(`${configUrl}/${id}`);
-export const getLayers = () => axios.get(layerUrl);
+const authHeader = (token) => ({ headers: { 'Authorization': `Bearer ${token}` } })
 
-export const uploadLayer = (layer, files) => axios.post(`${layerUrl}/${layer}`, files);
-export const updateLayer = (id, updatedLayer) => axios.patch(`${layerUrl}/update/${id}`, updatedLayer);
-export const updateOrder = (data) => axios.patch(`${layerUrl}/order`, data);
+export const signup = (body) => axios.post(`${authURL}/signup`, body)
+export const login = (body) => axios.post(`${authURL}/login`, body)
 
-export const getArt = () => axios.get(artURL);
-export const downloadAll = () => axios.get(`${artURL}/download/all`, { responseType: 'blob' });
-export const generateArt = (config) => axios.post(artURL, config);
+export const getProjects = (token) => axios.get(`${projectUrl}/all`, authHeader(token))
+export const getProject = (id, token) => axios.get(`${projectUrl}/${id}`, authHeader(token))
+export const createProject = (newProject, token) => axios.post(projectUrl, newProject, authHeader(token))
+export const updateProject = (id, updatedProject, token) => axios.patch(`${projectUrl}/${id}`, updatedProject, authHeader(token))
+export const deleteProject = (id, token) => axios.delete(`${projectUrl}/${id}`, authHeader(token))
+export const getLayers = (proj, token) => axios.get(`${layerUrl}/${proj}/all`, authHeader(token))
+export const uploadLayer = (proj, layerName, files, token) => axios.post(`${layerUrl}/${proj}/${layerName}`, files, authHeader(token))
+export const updateLayer = (proj, layer, updatedLayer, token) => axios.patch(`${layerUrl}/${proj}/${layer}`, updatedLayer, authHeader(token))
+export const updateOrder = (proj, data, token) => axios.patch(`${layerUrl}/${proj}/order`, data, authHeader(token))
+// --------
+export const generateArt = (proj, config, token) => axios.post(`${artURL}/${proj}`, config, authHeader(token))
+export const downloadAll = (proj, token) => axios.get(`${artURL}/${proj}/download/all`, { ...authHeader(token), responseType: 'blob' })
+export const getArt = (proj, token) => axios.get(`${artURL}/${proj}`, authHeader(token))
+// ---------
 

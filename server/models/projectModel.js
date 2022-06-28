@@ -1,4 +1,5 @@
-import mongoose from "mongoose";
+import mongoose from "mongoose"
+import { layerSchema } from "./layerModel.js"
 
 const projectSchema = mongoose.Schema({
     chain: String,
@@ -15,10 +16,12 @@ const projectSchema = mongoose.Schema({
     height: Number,
     width: Number,
     debug: Boolean,
-    layerList: [String],
-});
+    layerList: [layerSchema],
+    images: [String],
+    metadata: [String],
+})
 
 
-const projectModel = mongoose.model('projectModel', projectSchema);
+const projectModel = mongoose.model('projectModel', projectSchema)
 
-export default projectModel;
+export default projectModel

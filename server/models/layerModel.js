@@ -8,7 +8,7 @@ const traitSchema = mongoose.Schema({
     path: String,
 });
 
-const layerSchema = mongoose.Schema({
+export const layerSchema = mongoose.Schema({
     owner: String,
     name: String,
     order: { type: Number, default: 0, unique: false },

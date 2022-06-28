@@ -1,9 +1,25 @@
 import { mongoose } from 'mongoose'
 import layerModel from "../models/layerModel.js"
+import projectModel from '../models/projectModel.js'
 
+
+export const getLayers = async (req, res) => {
+    try {
+        const { proj } = req.params
+        const project = await projectModel.findById(proj)
+        const layers = await layerModel.find({
+            '_id': { $in: project.layerList.map((layer) => mongoose.Types.ObjectId(layer._id)) }
+        }).sort({ order: 1 })
+
+        res.status(201).json(layers)
+    } catch (error) {
+        res.status(409).json({ message: error })
+    }
+}
 
 export const uploadLayer = async (req, res) => {
     try {
+        const { proj } = req.params
         const traitList = []
         const url = req.protocol + '://' + req.get('host')
 
@@ -17,50 +33,51 @@ export const uploadLayer = async (req, res) => {
             })
         }
 
+        let project = await projectModel.findById(proj)
+
         const newLayer = new layerModel({
             name: req.params.layer,
             traitList,
-            order: await layerModel.countDocuments(),
+            order: project.layerList.length,
             totalWeight: traitList.length,
         })
 
-        newLayer.save().then(result => {
-            res.status(201).json(result)
-        })
+        const result = await newLayer.save()
+        project.layerList = project.layerList.concat(result)
+        await project.save()
+        res.status(201).json(result)
     } catch (error) {
-        res.status(500).json({ error: err })
-    }
-
-}
-
-export const getLayer = async (req, res) => {
-    try {
-        const layerModels = await layerModel.find().sort({ order: 1 })
-        res.status(201).json(layerModels)
-    } catch (error) {
-        res.status(409).json({ message: error })
+        res.status(500).json({ error })
     }
 }
 
 export const updateLayer = async (req, res) => {
-    const { id } = req.params
+    const { proj, layer } = req.params
     const { name, order, traitList, totalWeight, } = req.body
 
-    if (!mongoose.Types.ObjectId.isValid(id)) return res.status(404).send(`No layer with id: ${id}`)
+    if (!mongoose.Types.ObjectId.isValid(layer)) return res.status(404).send(`No layer with id: ${layer}`)
 
-    const updatedLayer = { name, order, traitList, totalWeight, _id: id }
-    await layerModel.findByIdAndUpdate(id, updatedLayer, { new: true })
+    const updatedLayer = { name, order, traitList, totalWeight, _id: layer }
+    await layerModel.findByIdAndUpdate(layer, updatedLayer, { new: true })
+
+    let project = await projectModel.findById(proj)
+    const updatedIndex = project.layerList.findIndex((obj) => obj._id === layer)
+    project[updatedIndex] = updatedLayer
+    await project.save()
 
     res.status(204).json({ message: "Updated Layer Succesfully!" })
 }
 
 export const updateOrder = async (req, res) => {
-    const idsToUpdate = req.body
+    const { proj } = req.params
+    const newLayerList = req.body
 
-    for (const layer of idsToUpdate) {
+    for (const layer of newLayerList) {
         if (!mongoose.Types.ObjectId.isValid(layer._id)) return res.status(404).send(`No layer with id: ${layer._id}`)
         await layerModel.findByIdAndUpdate(layer._id, { order: layer.order })
     }
+
+    await projectModel.findByIdAndUpdate(proj, { layerList: newLayerList })
 
     res.status(204).json({ message: "Updated Order Succesfully!" })
 }

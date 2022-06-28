@@ -1,17 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import { Provider } from 'react-redux';
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import { MetaMaskProvider } from "metamask-react"
+import { SnackbarProvider } from 'notistack'
+import { Provider } from 'react-redux'
 
-import App from './App';
-import './index.css';
-import { store } from './store/store';
+import App from './App'
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+import './index.css'
+import { store } from './store/store'
+
+const root = ReactDOM.createRoot(document.getElementById('root'))
 
 root.render(
-    <React.StrictMode>
-        <Provider store={store}>
-            <App />
-        </Provider>
-    </React.StrictMode>
-); 
+    <Provider store={store}>
+        <MetaMaskProvider>
+            <SnackbarProvider>
+                <App />
+            </SnackbarProvider>
+        </MetaMaskProvider>
+    </Provider>
+) 

@@ -1,13 +1,15 @@
-import { configureStore } from '@reduxjs/toolkit';
+import { configureStore } from '@reduxjs/toolkit'
 
-import configSlice from '../slices/configSlice';
-import layerSlice from '../slices/layerSlice';
-import artSlice from '../slices/artSlice';
+import userSlice from '../slices/userSlice'
+import authSlice from '../slices/authSlice'
+import pageSlice from '../slices/pageSlice'
+import projectSlice from '../slices/projectSlice'
 
 export const store = configureStore({
     reducer: {
-        config: configSlice.reducer,
-        layer: layerSlice.reducer,
-        art: artSlice.reducer,
+        page: pageSlice.reducer,
+        user: userSlice.reducer,
+        auth: authSlice.reducer,
+        project: projectSlice.reducer,
     },
-});
+})
