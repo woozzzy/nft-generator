@@ -33,7 +33,7 @@ export const createProject = (project, token) => async (dispatch) => {
 export const updateProject = (id, update, token) => async (dispatch) => {
     try {
         await api.updateProject(id, update, token)
-        dispatch(updateField(update))
+        dispatch(setProject(update))
     } catch (error) {
         console.log(error)
     }

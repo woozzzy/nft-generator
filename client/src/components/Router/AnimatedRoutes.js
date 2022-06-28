@@ -10,6 +10,8 @@ import UserProjects from '../UserProjects/UserProjects'
 import ProjectConfig from '../ProjectConfig/ProjectConfig'
 import LayerConfig from '../LayerConfig/LayerConfig'
 import Art from '../Art/Art'
+import Minter from '../Minter/Minter'
+import ChainInfo from '../ChainInfo/ChainInfo'
 
 const AnimatedRoutes = ({ currPage }) => {
     const location = useLocation()
@@ -51,6 +53,16 @@ const AnimatedRoutes = ({ currPage }) => {
                     <Route path="/art" element={
                         <ProtectedRoute path="/art">
                             <TransitionWrapper element={<Art />} />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/chain" element={
+                        <ProtectedRoute path="/chain">
+                            <TransitionWrapper element={<ChainInfo />} />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/mint" element={
+                        <ProtectedRoute path="/mint">
+                            <TransitionWrapper element={<Minter />} />
                         </ProtectedRoute>
                     } />
                     <Route path="*" element={

@@ -1,14 +1,30 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useConnectedMetaMask } from "metamask-react"
 import { Stack, Typography, Box, Alert, Collapse } from '@mui/material'
 
-import { networks } from '../../../constants/networks'
-import { TextPaper } from '../../styles'
+import { networks } from '../../constants/networks'
+import { TextPaper } from '../styles'
 import NetworkSwitch from './NetworkSwitch/NetworkSwitch'
+import { updateProject } from '../../actions/project'
+import { setCanContinue } from '../../slices/pageSlice'
 
-
-const WalletInfo = () => {
+const ChainInfo = () => {
     const { account, chainId } = useConnectedMetaMask()
+    const dispatch = useDispatch()
+    const project = useSelector((state) => state.project)
+    const user = useSelector((state) => state.user.user)
+
+    useEffect(() => {
+        dispatch(updateProject(project._id, { ...project, chain: chainId }, user.token))
+        if (!networks[chainId]) dispatch(setCanContinue(false))
+    }, [])
+
+    useEffect(() => {
+        dispatch(updateProject(project._id, { ...project, chain: chainId }, user.token))
+        !networks[chainId] ? dispatch(setCanContinue(false)) : dispatch(setCanContinue(true))
+    }, [chainId])
+
 
     return (
         <Stack alignItems='center' width='100%'>
@@ -44,4 +60,4 @@ const WalletInfo = () => {
     )
 }
 
-export default WalletInfo
+export default ChainInfo

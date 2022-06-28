@@ -3,12 +3,12 @@ import { useConnectedMetaMask, useMetaMask } from "metamask-react"
 import { useSnackbar } from 'notistack'
 import { Typography } from '@mui/material'
 
-import { MetaBtn } from '../../../styles'
-import { networks, networkParams } from '../../../../constants/networks'
+import { MetaBtn } from '../../styles'
+import { networks, networkParams } from '../../../constants/networks'
 
 const NetworkSwitch = ({ chainId }) => {
     const { switchChain } = useConnectedMetaMask()
-    const { addChain } = useMetaMask();
+    const { addChain } = useMetaMask()
     const { enqueueSnackbar } = useSnackbar()
 
     const handleSwitch = async () => {

@@ -45,7 +45,6 @@ const ArtGrid = () => {
                     <Button sx={{ margin: '1rem' }} variant="contained" color='primary' component="label" onClick={handleRegenerate} >
                         <Typography>Regenerate</Typography>
                     </Button>
-
                 </Box>
             </Stack>
         )

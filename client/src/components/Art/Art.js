@@ -1,16 +1,22 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { Typography, Button } from "@mui/material"
 
 
 import { generateArt } from "../../actions/art"
 import ArtGrid from './ArtGrid/ArtGrid'
+import { setCanContinue } from "../../slices/pageSlice"
 
 const Art = () => {
     const project = useSelector((state) => state.project)
     const token = useSelector((state) => state.user.user.token)
     const dispatch = useDispatch()
     const [generated, setGenerated] = useState(project.images.length > 0 ? true : false)
+
+
+    useEffect(() => {
+        if (project.images.length > 0) dispatch(setCanContinue(true))
+    }, [project.images])
 
 
     const handleClick = () => {

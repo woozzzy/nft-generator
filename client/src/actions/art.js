@@ -31,7 +31,7 @@ export const generateArt = (project, token) => async (dispatch) => {
         dispatch(updateField({ field: 'images', data: [] }))
         dispatch(updateField({ field: 'metadata', data: [] }))
         const { data } = await api.generateArt(project._id, project, token);
-        console.log(data);
+
         dispatch(updateField({ field: 'images', data: data.images }))
         dispatch(updateField({ field: 'metadata', data: data.json }))
     } catch (error) {
