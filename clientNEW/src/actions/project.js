@@ -1,6 +1,6 @@
 import * as api from '../api/index.js'
-import { setProject } from '../slices/projectSlice'
-import { setProjects } from '../slices/userSlice'
+import { setProject, updateField } from '../slices/projectSlice'
+import { pushToProjects, setProjects } from '../slices/userSlice'
 
 export const getProjects = (token) => async (dispatch) => {
     try {
@@ -14,36 +14,27 @@ export const getProjects = (token) => async (dispatch) => {
 export const getProject = (id, token) => async (dispatch) => {
     try {
         const { data } = await api.getProject(id, token)
-        console.log(data)
         dispatch(setProject(data))
     } catch (error) {
         console.log(error)
     }
 }
 
-export const createProject = (config) => async (dispatch) => {
+export const createProject = (project, token) => async (dispatch) => {
     try {
-        const { data } = await api.createProject(config)
+        const { data } = await api.createProject(project, token)
         dispatch(setProject(data))
+        dispatch(pushToProjects(data))
     } catch (error) {
         console.log(error)
     }
 }
 
-// export const updateProject = (id, config) => async (dispatch) => {
-//     try {
-//         const { data } = await api.updateConfig(id, config)
-//         dispatch(UPDATE(data))
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
-
-// export const deleteConfig = (id) => async (dispatch) => {
-//     try {
-//         await api.deleteConfig(id)
-//         dispatch(DELETE(id))
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
+export const updateProject = (id, update, token) => async (dispatch) => {
+    try {
+        await api.updateProject(id, update, token)
+        dispatch(updateField(update))
+    } catch (error) {
+        console.log(error)
+    }
+}

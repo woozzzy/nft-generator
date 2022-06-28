@@ -1,10 +1,10 @@
-import { fetch_all, upload, update, setLayerList } from '../slices/layerSlice';
 import * as api from '../api/index.js';
+import { setLayerList, pushToLayerList, updateLayerList } from '../slices/projectSlice';
 
 export const getLayers = () => async (dispatch) => {
     try {
         const { data } = await api.getLayers();
-        dispatch(fetch_all(data));
+        dispatch(setLayerList(data));
     } catch (error) {
         console.log(error);
     }
@@ -19,7 +19,7 @@ export const uploadLayer = (files) => async (dispatch) => {
             data.append('layerUpload', newFile)
         }
         const res = await api.uploadLayer(files.layerName, data);
-        dispatch(upload(res.data))
+        dispatch(pushToLayerList(res.data))
     } catch (error) {
         console.log(error);
     }
@@ -28,7 +28,7 @@ export const uploadLayer = (files) => async (dispatch) => {
 export const updateLayer = (id, layer) => async (dispatch) => {
     try {
         await api.updateLayer(id, layer);
-        dispatch(update(layer));
+        dispatch(updateLayerList(layer));
     } catch (error) {
         console.log(error);
     }

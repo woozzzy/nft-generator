@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const pageSlice = createSlice({
     name: 'page',
     initialState: {
-        list: ['/', '/auth', '/user', '/config'],
+        list: ['/', '/auth', '/user', '/config', '/layer'],
         index: 0,
         canContinue: true,
         curr: '/',

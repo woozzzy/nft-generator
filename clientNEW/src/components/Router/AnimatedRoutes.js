@@ -8,6 +8,7 @@ import Home from '../Home'
 import Auth from '../Auth/Auth'
 import UserProjects from '../UserProjects/UserProjects'
 import ProjectConfig from '../ProjectConfig/ProjectConfig'
+import LayerConfig from '../LayerConfig/LayerConfig'
 
 const AnimatedRoutes = ({ currPage }) => {
     const location = useLocation()
@@ -16,7 +17,6 @@ const AnimatedRoutes = ({ currPage }) => {
         if (currPage !== path) {
             return <Navigate to={currPage} replace />
         }
-
         return children
     })
 
@@ -40,6 +40,11 @@ const AnimatedRoutes = ({ currPage }) => {
                     <Route path="/config" element={
                         <ProtectedRoute path="/config">
                             <TransitionWrapper element={<ProjectConfig />} />
+                        </ProtectedRoute>
+                    } />
+                    <Route path="/layer" element={
+                        <ProtectedRoute path="/layer">
+                            <TransitionWrapper element={<LayerConfig />} />
                         </ProtectedRoute>
                     } />
                     <Route path="*" element={

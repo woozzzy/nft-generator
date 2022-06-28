@@ -1,17 +1,23 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSnackbar } from 'notistack'
 import { useMetaMask } from "metamask-react"
 import { Typography, CircularProgress, Alert } from '@mui/material'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 
 
 import DbAuth from './DbAuth/DbAuth'
 import { MetaBtn } from '../styles'
+import { setCanContinue } from '../../slices/pageSlice'
 
 const Auth = () => {
-    const { status, connect } = useMetaMask();
+    const { status, connect } = useMetaMask()
     const { enqueueSnackbar } = useSnackbar()
     const { isAuth } = useSelector((state) => state.auth)
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(setCanContinue(isAuth))
+    }, [isAuth])
 
     const connectMetamask = async () => {
         if (status === "unavailable") {

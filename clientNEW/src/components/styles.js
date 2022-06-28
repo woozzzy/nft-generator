@@ -61,7 +61,7 @@ export const ProjectCard = styled(Card, { namae: 'ProjectCard' })(({ theme }) =>
 }))
 
 export const FormField = styled(TextField, { namae: 'FormField' })(({ theme }) => ({
-    margin: '0.75rem',
+    margin: '0.5rem',
     maxWidth: '100%',
     input: {
         color: "#00929a",

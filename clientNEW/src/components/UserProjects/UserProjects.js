@@ -8,6 +8,7 @@ import { getProjects, getProject } from '../../actions/project'
 import { ProjectCard, NavBtn } from '../styles'
 import { networks } from '../../constants/networks'
 import { nextPage, setCanContinue } from '../../slices/pageSlice'
+import { clearProject } from '../../slices/projectSlice'
 
 
 const UserProjects = () => {
@@ -25,6 +26,11 @@ const UserProjects = () => {
         dispatch(nextPage())
     }
 
+    const handleCreateClick = () => {
+        dispatch(clearProject())
+        dispatch(nextPage())
+    }
+
     return (
         <>
             <Grid container justifyContent="center" sx={{
@@ -32,7 +38,7 @@ const UserProjects = () => {
                 display: 'flex',
                 flexWrap: 'wrap',
             }}>
-                {projects.map((project, index) => (
+                {projects && projects.length > 0 ? projects.map((project, index) => (
                     <Grid item xs={12} sm={3} md={2} key={index} sx={{ margin: '1em' }}>
                         <ProjectCard>
                             <ButtonBase
@@ -52,9 +58,9 @@ const UserProjects = () => {
                             </ButtonBase>
                         </ProjectCard>
                     </Grid>
-                ))}
+                )) : null}
                 <Grid item xs={12} sx={{ margin: '1em' }} display='flex' justifyContent='center' alignItems='center'>
-                    <NavBtn variant='contained' onClick={() => dispatch(nextPage())}>
+                    <NavBtn variant='contained' onClick={handleCreateClick}>
                         <Typography fontFamily='Helvetica' fontWeight='Bold' color='white'>
                             Create New Project
                         </Typography>

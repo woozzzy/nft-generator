@@ -13,6 +13,9 @@ const userSlice = createSlice({
         setProjects: (state, action) => {
             state.projects = action.payload
         },
+        pushToProjects: (state, action) => {
+            state.projects.push(action.payload)
+        },
         clear: (state) => {
             state.user = null
             state.projects = null
@@ -20,6 +23,6 @@ const userSlice = createSlice({
     }
 });
 
-export const { setUser, clear, setProjects } = userSlice.actions;
+export const { setUser, clear, setProjects, pushToProjects } = userSlice.actions;
 
 export default userSlice;

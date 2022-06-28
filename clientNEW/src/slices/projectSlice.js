@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 const projectSlice = createSlice({
     name: 'project',
     initialState: {
-        _id: '',
         chain: '',
         nftName: '',
         nftDescription: '',
@@ -29,9 +28,35 @@ const projectSlice = createSlice({
             state.layerList = action.payload.layerList
             state.debug = action.payload.debug
         },
+        updateField: (state, action) => {
+            const { field, data } = action.payload
+            state[field] = data
+        },
+        clearProject: (state) => {
+            delete state._id
+            state.chain = ''
+            state.nftName = ''
+            state.nftDescription = ''
+            state.startingEdition = 0
+            state.editionCount = 0
+            state.generateAll = false
+            state.height = 512
+            state.width = 512
+            state.layerList = []
+            state.debug = false
+        },
+        setLayerList: (state, action) => {
+            state.layerList = action.payload;
+        },
+        pushToLayerList: (state, action) => {
+            state.layerList.push(action.payload);
+        },
+        updateLayerList: (state, action) => {
+            state.layerList.map((layer) => (layer._id === action.payload._id ? action.payload : layer));
+        },
     }
 });
 
-export const { setProject } = projectSlice.actions
+export const { setProject, updateField, clearProject, setLayerList, pushToLayerList, updateLayerList } = projectSlice.actions
 
 export default projectSlice;

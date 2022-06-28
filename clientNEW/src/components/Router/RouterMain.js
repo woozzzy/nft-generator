@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { BrowserRouter as Router, Link } from "react-router-dom"
 import { Grid, Typography, Box } from "@mui/material"
 import { useDispatch, useSelector } from 'react-redux'
@@ -6,12 +6,10 @@ import { useDispatch, useSelector } from 'react-redux'
 import { NavBtn } from "../styles"
 import AnimatedRoutes from "./AnimatedRoutes"
 import { nextPage, prevPage } from '../../slices/pageSlice'
-import { setCanContinue } from '../../slices/pageSlice'
 
 const RouterMain = () => {
     // eslint-disable-next-line no-unused-vars
     const { curr, next, prev, canContinue } = useSelector((state) => state.page)
-    const isAuth = useSelector((state) => state.auth.isAuth)
     const dispatch = useDispatch()
 
     const handleNext = () => {
@@ -20,15 +18,6 @@ const RouterMain = () => {
     const handlePrev = () => {
         dispatch(prevPage())
     }
-
-    useEffect(() => {
-        if (curr !== '/') {
-            dispatch(setCanContinue(isAuth))
-        } else {
-            dispatch(setCanContinue(true))
-        }
-    }, [curr, isAuth])
-
 
     return (
         <Router>
