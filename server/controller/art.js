@@ -9,7 +9,8 @@ export const getArt = async (req, res) => {
         const { proj } = req.params
         const images = await fs.readdir(`./public/${proj}/output/images`)
         const json = await fs.readdir(`./public/${proj}/output/json`)
-        const url = req.protocol + '://' + req.get('host');
+        const host = await ipify({ useIPv6: false })
+        const url = req.protocol + '://' + host
         res.status(200).json({
             images: images.map((image) => (url + `./public/${proj}output/images` + encodeURI(image))),
             json: json.map((json) => (url + `./public/${proj}output/json` + encodeURI(json)))
@@ -48,7 +49,8 @@ export const generateArt = async (req, res) => {
         const config = req.body;
         const getTraitMap = await buildTraitMap(config.layerList)
         const ret = await generate(config, getTraitMap);
-        const url = req.protocol + '://' + req.get('host');
+        const host = await ipify({ useIPv6: false })
+        const url = req.protocol + '://' + host
 
         const images = ret.images.map((image) => (url + encodeURI(image.slice(1))))
         const metadata = ret.metadata.map((metadata) => (url + encodeURI(metadata.slice(1))))
