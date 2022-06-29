@@ -1,0 +1,41 @@
+{
+  "name": "nft-generator",
+  "version": "1.0.0",
+  "description": "Automatic NFT generation and minting given various layers.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/woozzzy/nft-generator.git"
+  },
+  "author": "Sunwoo Park",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/woozzzy/nft-generator/issues"
+  },
+  "homepage": "https://github.com/woozzzy/nft-generator#readme",
+  "dependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.6",
+    "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "@openzeppelin/contracts": "^4.6.0",
+    "canvas": "^2.9.1",
+    "chai": "^4.3.6",
+    "dotenv": "^16.0.1",
+    "ethers": "^5.6.8",
+    "hardhat-gas-reporter": "^1.0.8",
+    "inquirer": "^8.2.4",
+    "mime": "^3.0.0",
+    "nft.storage": "^6.3.0",
+    "node-fetch": "^3.2.4"
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-web3": "^2.0.0",
+    "hardhat": "^2.9.7",
+    "web3": "^1.7.3"
+  },
+  "directories": {
+    "test": "test"
+  }
+}

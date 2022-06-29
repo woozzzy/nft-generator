@@ -1,5 +1,5 @@
 import * as api from '../api/index.js'
-import { setProject, updateField } from '../slices/projectSlice'
+import { setProject } from '../slices/projectSlice'
 import { pushToProjects, setProjects } from '../slices/userSlice'
 
 export const getProjects = (token) => async (dispatch) => {

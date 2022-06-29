@@ -115,12 +115,12 @@ const createMetadata = async (uuid, config) => {
 
 const contractMetadata = async (config) => {
     let metadata = {
-        name: config.collectionName,
-        description: config.collectionDescription,
-        image: config.collectionImage,
-        external_link: config.collectionLink,
-        seller_fee_basis_points: config.fee,
-        fee_recipient: config.feeRecipient
+        name: config.nftName,
+        description: config.nftDescription,
+        image: '',
+        external_link: '',
+        seller_fee_basis_points: '',
+        fee_recipient: ''
     };
     const path = `${outPath}/json/collectionMetadata.json`
     await fs.writeFile(path, JSON.stringify(metadata, null, 2));
