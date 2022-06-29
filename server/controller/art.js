@@ -1,5 +1,6 @@
 import { promises as fs } from 'fs';
 import archiver from 'archiver';
+import { publicIpv4 } from 'public-ip';
 
 import { buildTraitMap, generate, setupDir } from '../utils/art_engine.js';
 import projectModel from '../models/projectModel.js';
@@ -9,7 +10,7 @@ export const getArt = async (req, res) => {
         const { proj } = req.params
         const images = await fs.readdir(`./public/${proj}/output/images`)
         const json = await fs.readdir(`./public/${proj}/output/json`)
-        const host = await ipify({ useIPv6: false })
+        const host = await publicIpv4()
         const url = req.protocol + '://' + host
         res.status(200).json({
             images: images.map((image) => (url + `./public/${proj}output/images` + encodeURI(image))),
@@ -49,7 +50,7 @@ export const generateArt = async (req, res) => {
         const config = req.body;
         const getTraitMap = await buildTraitMap(config.layerList)
         const ret = await generate(config, getTraitMap);
-        const host = await ipify({ useIPv6: false })
+        const host = await publicIpv4()
         const url = req.protocol + '://' + host
 
         const images = ret.images.map((image) => (url + encodeURI(image.slice(1))))

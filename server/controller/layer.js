@@ -1,7 +1,7 @@
 import { mongoose } from 'mongoose'
 import layerModel from "../models/layerModel.js"
 import projectModel from '../models/projectModel.js'
-import ipify from 'ipify'
+import { publicIpv4 } from 'public-ip';
 
 export const getLayers = async (req, res) => {
     try {
@@ -21,9 +21,8 @@ export const uploadLayer = async (req, res) => {
     try {
         const { proj } = req.params
         const traitList = []
-        const host = await ipify({ useIPv6: false })
+        const host = await publicIpv4()
         const url = req.protocol + '://' + host
-        console.log(url)
 
         for (let i = 0; i < req.files.length; i++) {
             traitList.push({
