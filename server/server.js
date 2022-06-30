@@ -23,7 +23,7 @@ app.use('/api/user', userRoutes)
 app.use('/api/project', projectRoutes)
 app.use('/api/layer', layerRoutes)
 app.use('/api/art', artRoutes)
-app.use('/public', express.static(path.join(process.cwd(), 'public')))
+app.use('/api/public', express.static(path.join(process.cwd(), 'public')))
 
 mongoose.connect(CONNECTION_URL, { useNewURLParser: true, useUnifiedTopology: true })
     .then(() => app.listen(PORT, () => console.log(`Server running on port: ${PORT}`)))

@@ -22,7 +22,7 @@ export const uploadLayer = async (req, res) => {
         const { proj } = req.params
         const traitList = []
         const host = await publicIpv4()
-        const url = req.protocol + '://' + host
+        const url = req.protocol + '://' + host + '/api'
 
         for (let i = 0; i < req.files.length; i++) {
             traitList.push({

@@ -38,3 +38,12 @@ export const generateArt = (project, token) => async (dispatch) => {
         console.log(error);
     }
 };
+
+export const uploadToIPFS = (project, key, token) => async (dispatch) => {
+    try {
+        const { data } = await api.uploadToIPFS(project._id, { key }, token);
+        console.log(data)
+    } catch (error) {
+        console.log(error);
+    }
+};

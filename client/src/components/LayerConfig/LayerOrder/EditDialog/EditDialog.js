@@ -3,7 +3,7 @@ import { Dialog, DialogTitle, List, ListItem, Box, Typography, ListItemIcon, Tex
 
 import { ListBox } from "../../../styles"
 
-const EditDialog = ({ theme, open, onClose, currentLayer }) => {
+const EditDialog = ({ open, onClose, currentLayer }) => {
     const [traitList, setTraitList] = useState();
     const [totalWeight, setTotalWeight] = useState();
     const [changed, setChanged] = useState(false);

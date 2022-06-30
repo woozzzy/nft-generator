@@ -2,17 +2,15 @@
 import { promises as fs } from "fs";
 import pkg from "canvas";
 import crypto from 'crypto';
-import path from "path";
+import path from 'path'
+import { NFTStorage, File } from 'nft.storage'
+import mime from 'mime'
+
 const { createCanvas, loadImage } = pkg;
 
 // Paths
 const basePath = "./public";
 let outPath = basePath + "/output";
-
-
-// let uuidSet = new Set();
-// let edition = 0;
-// let maxEditions = 1;
 
 export const setupDir = async (proj) => {
     try {
@@ -122,14 +120,10 @@ const contractMetadata = async (config) => {
         seller_fee_basis_points: '',
         fee_recipient: ''
     };
-    const path = `${outPath}/json/collectionMetadata.json`
+    const path = `${outPath}/collectionMetadata.json`
     await fs.writeFile(path, JSON.stringify(metadata, null, 2));
     config.debug ? console.log(`Created collectionMetadata.json`) : null;
     return path;
-}
-
-const saveConfiguration = async (edition) => {
-    await fs.writeFile(`${outPath}/config.json`, JSON.stringify({ ...config, generatedEditions: edition }, null, 2))
 }
 
 export const generate = async (config, getTraitMap) => {
@@ -157,7 +151,6 @@ export const generate = async (config, getTraitMap) => {
     }
 
     const contract = await contractMetadata(config);
-    config.saveConfig ? await saveConfiguration(edition) : null
 
     return {
         images,
@@ -166,5 +159,40 @@ export const generate = async (config, getTraitMap) => {
     }
 }
 
+const fileFromPath = async (filePath) => {
+    const content = await fs.readFile(filePath)
+    const type = mime.getType(filePath)
 
+    return new File([content], path.basename(filePath), { type })
+}
 
+export const storeNFT = async (proj, key) => {
+    const outpath = `./public/${proj}/output`
+    const client = new NFTStorage({ token: key })
+    const images = (await fs.readdir(`${outpath}/images`)).filter(item => !(/(^|\/)\.[^\/\.]/g).test(item)).sort((a, b) => a.split('-')[0] - b.split('-')[0])
+    const jsons = (await fs.readdir(`${outpath}/json`)).filter(item => !(/(^|\/)\.[^\/\.]/g).test(item)).sort((a, b) => a.split('-')[0] - b.split('-')[0])
+
+    let imageList = []
+    let metadataList = []
+
+    for (const image of images) {
+        imageList.push(await fileFromPath(`${outpath}/images/${image}`))
+    }
+
+    const imgBaseUri = await client.storeDirectory(imageList)
+
+    for (const [i, json] of jsons.entries()) {
+        const rawMetadata = await fs.readFile(`${outpath}/json/${json}`)
+        metadataList.push(new File(
+            [JSON.stringify({
+                image: `ipfs://${imgBaseUri}/${images[i]}`,
+                ...JSON.parse(rawMetadata)
+            }, null, 2)], `${json}`
+        ))
+
+    }
+    metadataList.push(fileFromPath(`${outpath}/collectionMetadata.json`))
+
+    const metadataBaseUri = await client.storeDirectory(metadataList)
+    return jsons.concat(`collectionMetadata.json`).map((json) => `ipfs://${metadataBaseUri}/${json}`)
+}

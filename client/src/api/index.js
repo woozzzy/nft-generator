@@ -24,7 +24,8 @@ export const uploadLayer = (proj, layerName, files, token) => axios.post(`${laye
 export const updateLayer = (proj, layer, updatedLayer, token) => axios.patch(`${layerUrl}/${proj}/${layer}`, updatedLayer, authHeader(token))
 export const updateOrder = (proj, data, token) => axios.patch(`${layerUrl}/${proj}/order`, data, authHeader(token))
 
-export const generateArt = (proj, config, token) => axios.post(`${artURL}/${proj}`, config, authHeader(token))
-export const downloadAll = (proj, token) => axios.get(`${artURL}/${proj}/download/all`, { ...authHeader(token), responseType: 'blob' })
 export const getArt = (proj, token) => axios.get(`${artURL}/${proj}`, authHeader(token))
+export const downloadAll = (proj, token) => axios.get(`${artURL}/${proj}/download/all`, { ...authHeader(token), responseType: 'blob' })
+export const generateArt = (proj, config, token) => axios.post(`${artURL}/${proj}`, config, authHeader(token))
+export const uploadToIPFS = (proj, key, token) => axios.post(`${artURL}/${proj}/upload`, key, authHeader(token))
 
