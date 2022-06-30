@@ -15,7 +15,7 @@ export const config = {
     collectionImage: "image-url",
     collectionLink: "external-link-url",
     fee: 100,
-    feeRecipient: "0xA97F337c39cccE66adfeCB2BF99C1DdC54C2D721",
+    feeRecipient: "0xA97F337c39casdasfds2BF99C1DdC54C2D721",
     // NFT Level Metadata
     nftName: "test",
     nftDescription: "descriptiongoeshere",

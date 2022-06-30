@@ -11,18 +11,20 @@ module.exports = {
   networks: {
     hardhat: {
     },
-    Ethereum : {
+    Ethereum: {
       url: 'https://eth-mainnet.public.blastapi.io',
-    },
-    Polygon : {
-      url: 'https://eth-mainnet.public.blastapi.io',
-    },
-    PolygonMumbai : {
-      url: "https://matic-mumbai.chainstacklabs.com", 
       accounts: [PRIVATE_KEY]
     },
-    KlaytnBaobab : {
-      url: "https://api.baobab.klaytn.net:8651", 
+    Polygon: {
+      url: 'https://eth-mainnet.public.blastapi.io',
+      accounts: [PRIVATE_KEY]
+    },
+    PolygonMumbai: {
+      url: "https://matic-mumbai.chainstacklabs.com",
+      accounts: [PRIVATE_KEY]
+    },
+    KlaytnBaobab: {
+      url: "https://api.baobab.klaytn.net:8651",
       accounts: [PRIVATE_KEY],
       gasPrice: 250000000000,
     },
